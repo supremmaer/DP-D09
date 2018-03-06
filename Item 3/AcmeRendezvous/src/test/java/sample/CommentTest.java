@@ -48,11 +48,11 @@ public class CommentTest extends AbstractTest {
 				"admin", "rendezvous2", IllegalArgumentException.class
 			}, {
 				//un usuario que no tiene rsvp
-				"user7", "rendezvous1", IllegalArgumentException.class
+				"user7", "rendezvous2", IllegalArgumentException.class
 			}, {
 				"user1", "rendezvous1", null
 			}, {
-				"user2", "rendezvous1", null
+				"user3", "rendezvous1", null
 			}
 		};
 
