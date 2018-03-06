@@ -856,5 +856,73 @@
 	</bean>
 	
 	
+	
+	<!-- Manager -->
+	
+	<bean id="manager1" class="domain.Manager">
+		<property name="name" value="manager1 name" />
+		<property name="surname" value="manager 1 surname" />
+		<property name="postalAddress" value="Manager1Adrdress" />
+		<property name="phoneNumber" value="Manager1PhoneNumber" />
+		<property name="emailAddress" value="Manager1@email.com" />
+		<property name="birthDate" value="1986/02/16" />
+		<property name="vatNumber" value="1234-1234" />
+		<property name="userAccount" ref="userAccount9" />
+	</bean>
+	
+	
+	<!-- Category -->
+	<bean id="category1" class="domain.Category">
+		<property name="name" value="category 1" />
+		<property name="description" value="description 1" />
+		<property name="categories">
+			<list>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Services -->
+	
+	<bean id="service1" class="domain.Service">
+		<property name="name" value="service1 name" />
+		<property name="description" value="description 1" />
+		<property name="picture" value="http://url.com" />
+		<property name="cancelled" value="false" />
+		<property name="manager" ref="manager1" />
+		<property name="category" ref="category1" />
+	</bean>
+	
+	
+	<!-- Request -->
+	<bean id="request1" class="domain.Request">
+		<property name="comment" value="coment of request1" />
+		<property name="creditCard" ref="creditCard1" />
+		<property name="service" ref="service1" />
+		<property name="rendezvous" ref="rendezvous1" />
+	</bean>
+	
+	<!-- CreditCard -->
+	<bean id="creditCard1" class="domain.CreditCard">
+		<property name="holderName" value="holder" />
+		<property name="brandName" value="brand" />
+		<property name="number" value="1111222233334444" />
+		<property name="expirationMonth" value="10" />
+		<property name="expirationYear" value="20" />
+		<property name="CVV" value="123" />
+	</bean>
+	
+	<bean id="userAccount9" class="security.UserAccount">
+		<property name="username" value="manager1" />
+		<property name="password" value="c240642ddef994358c96da82c0361a58" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="MANAGER" />
+				</bean>
+
+			</list>
+		</property>
+	</bean>
+	
 
 </beans>
