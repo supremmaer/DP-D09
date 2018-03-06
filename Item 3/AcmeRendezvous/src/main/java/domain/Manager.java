@@ -9,6 +9,17 @@ import javax.persistence.Entity;
 @Access(AccessType.PROPERTY)
 public class Manager extends Actor {
 
+	private String	vatNumber;
+
+
+	public String getVatNumber() {
+		return this.vatNumber;
+	}
+
+	public void setVatNumber(final String vatNumber) {
+		this.vatNumber = vatNumber;
+	}
+
 	//Relationships
 
 }
