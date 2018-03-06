@@ -52,8 +52,12 @@ public class Service extends DomainEntity {
 		this.picture = picture;
 	}
 
-
 	//Relationships
+
+	public void setCancelled(final boolean cancelled) {
+		this.cancelled = cancelled;
+	}
+
 
 	private Category	category;
 	private Manager		manager;
