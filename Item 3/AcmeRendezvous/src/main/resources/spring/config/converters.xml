@@ -55,6 +55,9 @@
 		<bean class="converters.CreditCardToStringConverter" />
 		<bean class="converters.StringToCreditCardConverter" />
 
+		<bean class="converters.ConfigToStringConverter" />
+		<bean class="converters.StringToConfigConverter" />
+
 		<!-- <bean class="converters.ReplyToStringConverter" /> <bean class="converters.StringToReplyConverter" 
 			/> -->
 
