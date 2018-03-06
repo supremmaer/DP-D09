@@ -113,6 +113,19 @@
 			</list>
 		</property>
 	</bean>
+	
+	<bean id="userAccount9" class="security.UserAccount">
+		<property name="username" value="manager1" />
+		<property name="password" value="c240642ddef994358c96da82c0361a58" />
+		<property name="authorities">
+			<list>
+				<bean class="security.Authority">
+					<property name="authority" value="MANAGER" />
+				</bean>
+
+			</list>
+		</property>
+	</bean>
 
 	<!-- Other domain beans come here -->
 	<!-- User -->
@@ -909,19 +922,6 @@
 		<property name="expirationMonth" value="10" />
 		<property name="expirationYear" value="20" />
 		<property name="CVV" value="123" />
-	</bean>
-	
-	<bean id="userAccount9" class="security.UserAccount">
-		<property name="username" value="manager1" />
-		<property name="password" value="c240642ddef994358c96da82c0361a58" />
-		<property name="authorities">
-			<list>
-				<bean class="security.Authority">
-					<property name="authority" value="MANAGER" />
-				</bean>
-
-			</list>
-		</property>
 	</bean>
 	
 
