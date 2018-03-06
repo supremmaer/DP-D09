@@ -40,7 +40,8 @@
 						code="master.page.login" /></a></li>
 			<li><a href="actor/create.do?actorType=USER"><spring:message
 						code="master.page.anonymous.action.1" /></a></li>
-
+			<li><a href="actor/create.do?actorType=MANAGER"><spring:message
+						code="master.page.registrerManager" /></a></li>
 
 		</security:authorize>
 

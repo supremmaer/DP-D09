@@ -35,6 +35,8 @@ public class ActorService {
 	@Autowired
 	private UserService				userService;
 
+	@Autowired
+	private ManagerService 			managerService;
 
 	//Constructor ----------------------------------------------------
 
@@ -59,6 +61,9 @@ public class ActorService {
 		} else if (actorType.equals(Authority.USER)) {
 			authority.setAuthority(Authority.USER);
 			result = this.userService.create();
+		} else if (actorType.equals(Authority.MANAGER)) {
+			authority.setAuthority(Authority.MANAGER);
+			result = this.managerService.create();
 		} else
 			throw new ServiceException("Invalid actor type parameter");
 
@@ -82,7 +87,8 @@ public class ActorService {
 		result.setBirthDate(actorForm.getBirthDate());
 		result.getUserAccount().setUsername(actorForm.getUsername());
 		result.getUserAccount().setPassword(actorForm.getPassword());
-
+	
+		
 		return result;
 	}
 

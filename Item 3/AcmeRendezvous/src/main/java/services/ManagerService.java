@@ -3,6 +3,7 @@ package services;
 
 import java.util.Collection;
 
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +52,16 @@ public class ManagerService {
 
 		return result;
 	}
-	//TODO: Incluir Assert
-	public void delete(final Manager manager) {
-		this.managerRepository.delete(manager);
 
-	}
-	//TODO: Incluir Assert
+
 	public Manager save(final Manager manager) {
 		Manager result;
+		String vatNumber=manager.getVatNumber();
+		Assert.notNull(vatNumber);
+		
+		Assert.isTrue(this.PatronOk(vatNumber));
+		
+		
 		result = this.managerRepository.save(manager);
 		return result;
 	}
@@ -79,5 +82,15 @@ public class ManagerService {
 
 		return result;
 	}
-
+	public boolean PatronOk(String string){
+		boolean isok=true;
+	
+		for(int i=0;i<= string.length()-1;i++){
+			char a =string.charAt(i);
+			if(!(Character.isAlphabetic(a)||Character.isDigit(a)||a=='-')){
+				 isok=false;
+			}
+	}
+		return isok;
+	}
 }

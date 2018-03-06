@@ -23,6 +23,7 @@ public class ActorForm {
 	private String	password2;
 	private Boolean	agree;
 	private Date	birthDate;
+	private String	vatNumber;
 
 
 	@Size(min = 5, max = 32)
@@ -118,6 +119,14 @@ public class ActorForm {
 
 	public void setBirthDate(final Date birthDate) {
 		this.birthDate = birthDate;
+	}
+	
+	public String getVatNumber() {
+		return vatNumber;
+	}
+
+	public void setVatNumber(String vatNumber) {
+		this.vatNumber = vatNumber;
 	}
 
 }
