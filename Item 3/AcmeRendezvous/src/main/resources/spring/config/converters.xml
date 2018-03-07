@@ -58,6 +58,9 @@
 		<bean class="converters.ConfigToStringConverter" />
 		<bean class="converters.StringToConfigConverter" />
 
+		<bean class="converters.AnswerToStringConverter" />
+		<bean class="converters.StringToAnswerConverter" />
+
 		<!-- <bean class="converters.ReplyToStringConverter" /> <bean class="converters.StringToReplyConverter" 
 			/> -->
 
