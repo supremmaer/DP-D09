@@ -74,6 +74,21 @@
 	<form:input path="address" />
 	<form:errors cssClass="error" path="address" />
 	<br />
+	
+	<jstl:if test="${manager==true}">
+	<form:label path="vatNumber">
+		<spring:message code="actor.vatNumber" />
+	</form:label>
+	<form:input path="vatNumber" />
+	<form:errors cssClass="error" path="vatNumber" />
+	
+	</jstl:if>
+	
+	
+	
+	
+	
+	
 	<form:label path="agree">
 		<spring:message code="actor.agree" />
 	</form:label>

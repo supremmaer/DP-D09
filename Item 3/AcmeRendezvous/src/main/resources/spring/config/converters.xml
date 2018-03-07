@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
- * converters.xml
- *
- * Copyright (C) 2017 Universidad de Sevilla
- * 
- * The use of this project is hereby constrained to the conditions of the 
- * TDG Licence, a copy of which you may download from 
- * http://www.tdg-seville.info/License.html
- -->
+<!-- * converters.xml * * Copyright (C) 2017 Universidad de Sevilla * * The 
+	use of this project is hereby constrained to the conditions of the * TDG 
+	Licence, a copy of which you may download from * http://www.tdg-seville.info/License.html -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
@@ -18,40 +12,55 @@
 	">
 
 	<util:list id="converters">
-	
+
 		<bean class="converters.AdministratorToStringConverter" />
 		<bean class="converters.StringToAdministratorConverter" />
-		
+
 		<bean class="converters.AnnouncementToStringConverter" />
 		<bean class="converters.StringToAnnouncementConverter" />
-		
+
 		<bean class="converters.CommentToStringConverter" />
 		<bean class="converters.StringToCommentConverter" />
-		
+
 		<bean class="converters.RendezvousToStringConverter" />
 		<bean class="converters.StringToRendezvousConverter" />
-		
+
 		<bean class="converters.UserToStringConverter" />
 		<bean class="converters.StringToUserConverter" />
-		
+
 		<bean class="converters.QuestionToStringConverter" />
 		<bean class="converters.StringToQuestionConverter" />
-		
+
 		<bean class="converters.RSVPToStringConverter" />
 		<bean class="converters.StringToRSVPConverter" />
-		
+
 		<bean class="converters.GPSCoordinatesToStringConverter" />
 		<bean class="converters.StringToGPSCoordinatesConverter" />
-		
-		<bean class="converters.AnswerToStringConverter" />
-		<bean class="converters.StringToAnswerConverter" /> 
-		
-		<!-- 
-		<bean class="converters.ReplyToStringConverter" />
-		<bean class="converters.StringToReplyConverter" />
-		
-		-->
-		
+
+		<bean class="converters.CreditCardToStringConverter" />
+		<bean class="converters.StringToCreditCardConverter" />
+
+		<bean class="converters.ManagerToStringConverter" />
+		<bean class="converters.StringToManagerConverter" />
+
+		<bean class="converters.ServiceToStringConverter" />
+		<bean class="converters.StringToServiceConverter" />
+
+		<bean class="converters.CategoryToStringConverter" />
+		<bean class="converters.StringToCategoryConverter" />
+
+		<bean class="converters.RequestToStringConverter" />
+		<bean class="converters.StringToRequestConverter" />
+
+		<bean class="converters.CreditCardToStringConverter" />
+		<bean class="converters.StringToCreditCardConverter" />
+
+		<bean class="converters.ConfigToStringConverter" />
+		<bean class="converters.StringToConfigConverter" />
+
+		<!-- <bean class="converters.ReplyToStringConverter" /> <bean class="converters.StringToReplyConverter" 
+			/> -->
+
 	</util:list>
-	
+
 </beans>

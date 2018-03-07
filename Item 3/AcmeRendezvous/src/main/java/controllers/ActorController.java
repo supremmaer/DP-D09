@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.ManagerService;
 import services.RendezvousService;
 import services.UserService;
 import domain.Actor;
+import domain.Manager;
 import domain.Rendezvous;
 import domain.User;
 import forms.ActorForm;
@@ -41,6 +43,10 @@ public class ActorController extends AbstractController {
 
 	@Autowired
 	private UserService			userService;
+	
+	@Autowired
+	private ManagerService		managerService;
+
 
 	@Autowired
 	private RendezvousService	rendezvousService;
@@ -89,6 +95,9 @@ public class ActorController extends AbstractController {
 		actorForm.setAuthority(actorType);
 
 		result = this.createRegisterModelAndView(actorForm);
+		if(actorType.equals("MANAGER")){
+			result.addObject("manager", true);
+		}
 		return result;
 	}
 
@@ -96,22 +105,40 @@ public class ActorController extends AbstractController {
 	public ModelAndView register(@Valid final ActorForm actorForm, final BindingResult binding) {
 		ModelAndView result;
 		Actor actor;
-
-		if (binding.hasErrors())
+		String vatNumber=actorForm.getVatNumber();
+		if (binding.hasErrors()){
 			result = this.createRegisterModelAndView(actorForm);
-		else
+		
+		
+		
+		}else if(vatNumber.isEmpty()&& actorForm.getAuthority().equals("MANAGER")){
+				result = this.createRegisterModelAndView(actorForm, "actor.vatNumberEmpty");
+			
+		}else if(!(managerService.PatronOk(actorForm.getVatNumber()))){
+			result = this.createRegisterModelAndView(actorForm, "actor.vatNumberPatronError");
+					
+			
+		}else{
 			try {
 				actor = this.actorService.create(actorForm);
 				if (binding.hasErrors())
 					result = this.createRegisterModelAndView(actorForm);
 				else {
 					actor = this.actorService.register(actor);
+					if(actorForm.getAuthority().equals("MANAGER")){
+					Manager m =this.managerService.findByUserAccount(actor.getUserAccount());
+					m.setVatNumber(actorForm.getVatNumber());
+					this.managerService.save(m);
+					}
 					result = new ModelAndView("redirect:/welcome/index.do");
+					
+					
 				}
 			} catch (final Throwable oops) {
 				oops.printStackTrace();
 				result = this.createRegisterModelAndView(actorForm, "actor.commit.error");
-			}
+				
+			}}
 		return result;
 	}
 	//	@RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -168,7 +195,9 @@ public class ActorController extends AbstractController {
 		result.addObject("actorForm", actorForm);
 		result.addObject("message", message);
 		result.addObject("requestURI", requestURI);
-
+		if(actorForm.getAuthority().equals("MANAGER")){
+			result.addObject("manager", true);
+		}
 		return result;
 	}
 
