@@ -1254,5 +1254,14 @@
 		<property name="CVV" value="123" />
 	</bean>
 	
+	<!-- Config -->
+	
+	<bean id="config" class="domain.Config">
+		<property name="banner" value="https://tinyurl.com/adventure-meetup" />
+		<property name="bussinessName" value="Adventure meetups" />
+		<property name="welcomeEnglish" value="Your place to organise your adventure meetups!" />
+		<property name="welcomeSpanish" value="Tu sitio para organizar quedadas de aventura" />
+	</bean>
+	
 
 </beans>
