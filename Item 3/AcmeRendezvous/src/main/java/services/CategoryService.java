@@ -30,6 +30,9 @@ public class CategoryService {
 	@Autowired
 	private Validator			validator;
 
+	@Autowired
+	private ServiceService		serviceService;
+
 
 	//Constructors
 	public CategoryService() {
@@ -54,10 +57,16 @@ public class CategoryService {
 	}
 	//TODO: Incluir Assert
 	public void delete(final int categoryId) {
-		//TODO: delete en cascada
 		Category category;
+		Actor actor;
 
+		actor = this.actorService.findByPrincipal();
+		Assert.isTrue(actor instanceof Administrator);
+		Assert.isTrue(this.serviceService.findByCategoryId(categoryId).isEmpty());
 		category = this.findOne(categoryId);
+		Assert.notNull(category);
+		Assert.isTrue(category.getCategories().isEmpty());
+
 		this.categoryRepository.delete(category);
 
 	}

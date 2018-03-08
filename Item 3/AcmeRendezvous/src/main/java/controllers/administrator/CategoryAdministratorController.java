@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import services.ActorService;
 import services.CategoryService;
 import controllers.AbstractController;
 import domain.Category;
@@ -34,9 +33,6 @@ public class CategoryAdministratorController extends AbstractController {
 
 	@Autowired
 	private CategoryService	categoryService;
-
-	@Autowired
-	private ActorService	actorService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -110,12 +106,12 @@ public class CategoryAdministratorController extends AbstractController {
 		return result;
 	}
 
-	@RequestMapping(value = "/delete", method = RequestMethod.GET)
-	public ModelAndView cancel(@RequestParam final int categoryId) {
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView cancel(final Category category) {
 		ModelAndView result;
 
-		this.categoryService.delete(categoryId);
-		result = new ModelAndView("redirect:/category/display.do?categoryId=" + categoryId);
+		this.categoryService.delete(category.getId());
+		result = new ModelAndView("redirect:/category/administrator/list.do");
 
 		return result;
 	}

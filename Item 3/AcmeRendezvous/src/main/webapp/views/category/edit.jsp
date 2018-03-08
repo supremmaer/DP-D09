@@ -26,7 +26,7 @@
 		<form:options items="${categories}" itemLabel="name" itemValue="id" />
 	</form:select> --%>
 	
-	<%-- <form:label path="parent"><spring:message code="category.parent" />:</form:label> --%>
+	<form:label path="parent"><spring:message code="category.parent" /></form:label>
 	<form:select path="parent">
 		<form:option
 			label="----"
@@ -39,6 +39,10 @@
 	<br />
 		
 	<acme:submit name="save" code="category.save"/>
+	
+	<jstl:if test="${category.categories[0]==null}">
+		<acme:submit name="delete" code="category.delete"/>
+	</jstl:if>
 	
 	<acme:cancel url="category/administrator/list.do" code="category.cancel"/>
 	

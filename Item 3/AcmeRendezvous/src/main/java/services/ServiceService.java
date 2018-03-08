@@ -61,4 +61,11 @@ public class ServiceService {
 		return result;
 	}
 
+	public Collection<domain.Service> findByCategoryId(final int categoryId) {
+		Collection<domain.Service> result;
+
+		result = this.serviceRepository.findByCategoryId(categoryId);
+
+		return result;
+	}
 }
