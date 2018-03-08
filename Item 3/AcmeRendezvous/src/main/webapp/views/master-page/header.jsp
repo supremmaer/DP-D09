@@ -69,9 +69,10 @@
 					<security:authorize access="hasRole('ADMINISTRATOR')">
 						<li><a href="administrator/dashboard.do"><spring:message
 									code="master.page.administrator.dashboard" /></a></li>
+						<li><a href="category/administrator/list.do"><spring:message
+									code="master.page.administrator.categories" /></a></li>
 						<li><a href="config/administrator/edit.do"><spring:message
 									code="master.page.administrator.config.edit" /></a></li>
-					
 					</security:authorize>
 
 					<li><a href="j_spring_security_logout"><spring:message

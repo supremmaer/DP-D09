@@ -35,6 +35,7 @@
 		<value>/views/answer/messages</value>
 		<value>/views/gpsCoordinates/messages</value>
 		<value>/views/question/messages</value>
+		<value>/views/category/messages</value>
 		<value>/views/config/messages</value>
 		
 	</util:list>
