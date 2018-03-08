@@ -10,14 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.ConfigRepository;
+import domain.Actor;
+import domain.Administrator;
 import domain.Config;
 
 @Service
 @Transactional
 public class ConfigService {
 
+	// Managed repository -----------------------------------------------------
+
 	@Autowired
 	private ConfigRepository	configRepository;
+
+	// Supporting Services  ---------------------------------------------------
+	@Autowired
+	private ActorService		actorService;
 
 
 	//Constructors
@@ -42,12 +50,21 @@ public class ConfigService {
 	}
 	//TODO: Incluir Assert
 	public void delete(final Config config) {
+		Actor actor;
+
+		actor = this.actorService.findByPrincipal();
+		Assert.isTrue(actor instanceof Administrator);
 		this.configRepository.delete(config);
 
 	}
 	//TODO: Incluir Assert
 	public Config save(final Config config) {
 		Config result;
+		Actor actor;
+		Assert.notNull(config);
+
+		actor = this.actorService.findByPrincipal();
+		Assert.isTrue(actor instanceof Administrator);
 		result = this.configRepository.save(config);
 		return result;
 	}
@@ -58,6 +75,12 @@ public class ConfigService {
 		result = this.configRepository.findOne(configId);
 		Assert.notNull(result);
 
+		return result;
+	}
+
+	public Config findConfiguration() {
+		Config result;
+		result = this.configRepository.findAll().get(0);
 		return result;
 	}
 

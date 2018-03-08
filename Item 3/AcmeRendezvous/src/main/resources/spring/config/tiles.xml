@@ -35,6 +35,7 @@
 		<value>/views/answer/tiles.xml</value>
 		<value>/views/gpsCoordinates/tiles.xml</value>
 		<value>/views/question/tiles.xml</value>
+		<value>/views/config/tiles.xml</value>
 		
 	</util:list>
 

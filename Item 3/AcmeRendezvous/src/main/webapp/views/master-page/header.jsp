@@ -12,12 +12,16 @@
 	pageEncoding="ISO-8859-1"%>
 
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 
 <div>
-	<img src="images/logo.png" alt="Sample Co., Inc." />
+	<a href="/AcmeRendezvous"><img class="banner" src="${pageBanner}" alt="Sample Co., Inc." /></a>
 </div>
+
+<h2><jstl:out value="${bussinessName}" /></h2>
+
 
 <div>
 	<ul id="jMenu">
@@ -65,6 +69,9 @@
 					<security:authorize access="hasRole('ADMINISTRATOR')">
 						<li><a href="administrator/dashboard.do"><spring:message
 									code="master.page.administrator.dashboard" /></a></li>
+						<li><a href="config/administrator/edit.do"><spring:message
+									code="master.page.administrator.config.edit" /></a></li>
+					
 					</security:authorize>
 
 					<li><a href="j_spring_security_logout"><spring:message
