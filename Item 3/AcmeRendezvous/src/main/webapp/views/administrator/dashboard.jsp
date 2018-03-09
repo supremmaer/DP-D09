@@ -99,6 +99,17 @@
 <fmt:formatNumber value="${sdReplysperComment}" pattern="####0.00"/>
 <br/><br/><br/>
 
+<b><spring:message code="administrator.SMS"/></b>
+<display:table pagesize="5" class="displaytag" keepStatus="true"
+	name="mostSellers" requestURI="${requestURI}" id="row">
+	
+	<b><spring:message code="administrator.SMS" var="title"/></b>
+	<display:column title="${title}">
+		<a href="service/display.do?serviceId=${row.id}">${row.name}</a>
+	</display:column>
+</display:table>
+<br/><br/><br/>
+
 
 </security:authorize>
 	

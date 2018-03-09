@@ -62,4 +62,9 @@ public class RequestService {
 		return result;
 	}
 
+	public Collection<Request> findByServiceID(final int id) {
+		final Collection<Request> result = this.requestRepository.findByServiceID(id);
+		return result;
+	}
+
 }

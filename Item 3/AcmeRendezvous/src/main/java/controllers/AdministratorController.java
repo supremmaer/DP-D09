@@ -25,8 +25,11 @@ import services.CommentService;
 import services.QuestionService;
 import services.RSVPService;
 import services.RendezvousService;
+import services.RequestService;
+import services.ServiceService;
 import services.UserService;
 import domain.Rendezvous;
+import domain.Service;
 
 @Controller
 @RequestMapping("/administrator")
@@ -57,6 +60,12 @@ public class AdministratorController extends AbstractController {
 
 	@Autowired
 	private CommentService		commentService;
+
+	@Autowired
+	private ServiceService		serviceService;
+
+	@Autowired
+	private RequestService		requestService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -120,6 +129,8 @@ public class AdministratorController extends AbstractController {
 		Double avgReplysperComment = 0.0;
 		Double sdReplysperComment = 0.0;
 
+		Collection<Service> mostSellers = new ArrayList<Service>();
+
 		if (this.rendezvousService.findAll().size() > 0) {
 
 			avgRendezvousesperUser = this.rendezvousService.averageRendezvousesperUser();
@@ -155,6 +166,8 @@ public class AdministratorController extends AbstractController {
 				avgReplysperComment = this.commentService.averageReplysperComment();
 				sdReplysperComment = this.commentService.standardDeviationReplysperComment();
 			}
+			if (this.serviceService.findAll().size() > 0 && this.requestService.findAll().size() > 0)
+				mostSellers = this.serviceService.findMostSellers();
 		}
 
 		result = new ModelAndView("administrator/dashboard");
@@ -187,6 +200,8 @@ public class AdministratorController extends AbstractController {
 
 		result.addObject("avgReplysperComment", avgReplysperComment);
 		result.addObject("sdReplysperComment", sdReplysperComment);
+
+		result.addObject("mostSellers", mostSellers);
 
 		result.addObject("requestURI", "administrator/dashboard.do");
 		return result;
