@@ -53,11 +53,15 @@ public class RendezvousController extends AbstractController {
 	// Listing ----------------------------------------------------------------		
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public ModelAndView list(@RequestParam(required = false) final Integer rendezvousId) {
+	public ModelAndView list(@RequestParam(required = false) final Integer rendezvousId, @RequestParam(required = false) final Integer categoryId) {
 		ModelAndView result;
 		Collection<Rendezvous> rendezvouses;
 
 		rendezvouses = rendezvousId == null ? this.rendezvousService.findAllFinal() : this.rendezvousService.findSimilar(rendezvousId);
+
+		if (categoryId != null)
+			rendezvouses = this.rendezvousService.findByCategoryId(categoryId);
+
 		result = new ModelAndView("rendezvous/list");
 		result.addObject("rendezvouses", rendezvouses);
 		result.addObject("requestURI", "rendezvous/list.do");
@@ -119,7 +123,7 @@ public class RendezvousController extends AbstractController {
 
 		final Rendezvous r = this.rendezvousService.findOne(rendezvousId);
 		this.rendezvousService.remove(r);
-		result = this.list(null);
+		result = this.list(null, null);
 
 		return result;
 	}
