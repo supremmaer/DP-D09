@@ -25,10 +25,10 @@ public interface RendezvousRepository extends JpaRepository<Rendezvous, Integer>
 	Collection<Rendezvous> findAllFinal();
 	//Category match
 
-	@Query("select r.rendezvous from Request r where r.service.category.id =?1")
+	@Query("select DISTINCT r.rendezvous from Request r where r.service.category.id =?1")
 	Collection<Rendezvous> findByCategoryId(int categoryId);
 
-	@Query("select r.rendezvous from Request r where r.service.category.name =?1")
+	@Query("select DISTINCT r.rendezvous from Request r where r.service.category.name =?1")
 	Collection<Rendezvous> findByCategoryName(int categoryName);
 	// Dashboard -----------------------------------------------------------
 
