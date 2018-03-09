@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import repositories.ServiceRepository;
+import domain.Manager;
+import domain.Rendezvous;
 import domain.Request;
 
 @Service
@@ -22,7 +24,12 @@ public class ServiceService {
 	private ServiceRepository	serviceRepository;
 
 	@Autowired
+	private ManagerService		managerService;
+	@Autowired
 	private RequestService		requestService;
+
+	@Autowired
+	private RendezvousService	rendezvousService;
 
 
 	//Constructors
@@ -34,10 +41,11 @@ public class ServiceService {
 		domain.Service result;
 
 		result = new domain.Service();
+		result.setCancelled(false);
+		result.setManager(this.managerService.findByPrincipal());
 
 		return result;
 	}
-
 	public Collection<domain.Service> findAll() {
 		Collection<domain.Service> result;
 
@@ -54,16 +62,35 @@ public class ServiceService {
 
 		return result;
 	}
+	public Collection<domain.Service> findByManager(final Manager manager) {
+		Collection<domain.Service> result;
 
-	//TODO: Incluir Assert
-	public void delete(final domain.Service s) {
-		this.serviceRepository.delete(s);
+		result = this.serviceRepository.findByManager(manager.getId());
+		Assert.notNull(result);
+
+		return result;
+	}
+
+	//DONE: Incluir Assert
+	public void delete(final domain.Service service) {
+		Collection<Rendezvous> rendezvouses;
+		Manager principal;
+
+		rendezvouses = this.rendezvousService.findByService(service);
+		principal = this.managerService.findByPrincipal();
+		Assert.isTrue(rendezvouses.isEmpty() && principal.getId() == service.getManager().getId());
+
+		this.serviceRepository.delete(service);
 
 	}
-	//TODO: Incluir Assert
-	public domain.Service save(final domain.Service s) {
+	//DONE: Incluir Assert
+	public domain.Service save(final domain.Service service) {
 		domain.Service result;
-		result = this.serviceRepository.save(s);
+		Manager principal;
+
+		principal = this.managerService.findByPrincipal();
+		Assert.isTrue(principal.getId() == service.getManager().getId());
+		result = this.serviceRepository.save(service);
 		return result;
 	}
 

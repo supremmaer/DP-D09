@@ -298,4 +298,13 @@ public class RendezvousService {
 		return result;
 	}
 
+	public Collection<Rendezvous> findByService(final domain.Service service) {
+		Collection<Rendezvous> result;
+
+		result = this.rendezvousRepository.findByServiceId(service.getId());
+		Assert.notNull(result);
+
+		return result;
+	}
+
 }

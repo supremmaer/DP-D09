@@ -59,8 +59,8 @@ public class RendezvousController extends AbstractController {
 
 		rendezvouses = rendezvousId == null ? this.rendezvousService.findAllFinal() : this.rendezvousService.findSimilar(rendezvousId);
 
-		if (categoryId != null)
-			rendezvouses = this.rendezvousService.findByCategoryId(categoryId);
+		if (categoryId != null) //TODO: Y este fallo?
+			rendezvouses = null;//this.rendezvousService.findByCategoryId(categoryId);
 
 		result = new ModelAndView("rendezvous/list");
 		result.addObject("rendezvouses", rendezvouses);
