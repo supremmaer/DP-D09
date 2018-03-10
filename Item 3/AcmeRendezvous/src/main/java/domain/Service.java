@@ -72,7 +72,6 @@ public class Service extends DomainEntity {
 		this.category = category;
 	}
 
-	@Valid
 	@NotNull
 	@ManyToOne(optional = false)
 	public Manager getManager() {

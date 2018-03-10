@@ -11,21 +11,36 @@
 <%@taglib prefix="security"
 	uri="http://www.springframework.org/security/tags"%>
 <%@taglib prefix="display" uri="http://displaytag.sf.net"%>
-<%@taglib prefix="acme" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="acme" tagdir="/WEB-INF/tags"%>
 
-<form:form action="announcement/user/edit.do" modelAttribute="announcement">
-	
+<form:form action="service/manager/edit.do" modelAttribute="service">
+
 	<form:hidden path="id" />
-	<form:hidden path="version" /> 
-	<form:hidden path="rendezvous" />
-	<form:hidden path="moment" />
-	  
-	<acme:textbox code="announcement.title" path="title"/>
+
+	<acme:textbox code="service.name" path="name" />
+
+	<acme:textarea code="service.description" path="description" />
+
+	<acme:textbox code="service.picture" path="picture" />
 	
-	<acme:textarea code="announcement.description" path="description"/>
+	<form:label path="category"><spring:message code="service.category" /></form:label>
+	<form:select path="category">
+		<form:option
+			label="----"
+			value="0" />
+		<form:options
+			items="${categories}"
+			itemLabel="name"
+			itemValue="id" />
+	</form:select>
+	<br />
+		
+	<acme:submit name="save" code="service.save"/>
 	
-	<acme:submit name="save" code="announcement.save"/>
+	<jstl:if test="${service.id!=0}">
+		<acme:submit name="delete" code="service.delete"/>
+	</jstl:if>
 	
-	<acme:cancel url="announcement/user/list.do" code="announcement.cancel"/>
-	
+	<acme:cancel url="service/manager/list.do" code="service.cancel"/>
+
 </form:form>

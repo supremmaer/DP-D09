@@ -27,9 +27,51 @@
 <display:table pagesize="5" class="displaytag" keepStatus="true"
 	name="services" requestURI="${requestURI}" id="row">
 
-	<spring:message code="service.datePattern" var="datePattern" />
+
 	<spring:message code="service.name" var="name" />
-	<display:column property="name" title="${name}" sortable="true" />
+	<display:column title="${name}" sortable="false">
+		<jstl:out value="${row.name}" />
+	</display:column>
+
+	<spring:message code="service.description" var="description" />
+	<display:column title="${description}" sortable="false">
+		<jstl:out value="${row.description}" />
+	</display:column>
+
+	<jstl:url value="${row.picture}" var="pictureURL"></jstl:url>
+	<spring:message code="service.picture" var="picture" />
+	<display:column title="${picture}" sortable="false">
+		<a href="${pictureURL }"><jstl:out value="${row.picture}" /></a>
+	</display:column>
+
+	<spring:message code="service.category" var="category" />
+	<display:column title="${category}" sortable="false">
+		<a href="category/list.do?categoryId=${row.id}"><jstl:out
+				value="${row.category.name}" /></a>
+	</display:column>
+
+	<spring:message code="service.status" var="status" />
+	<display:column title="${status}" sortable="false">
+		<jstl:choose> <jstl:when test="${row.cancelled}">
+		<spring:message code="service.status.cancelled"/>
+		</jstl:when>
+		<jstl:otherwise>
+		<spring:message code="service.status.active"/>
+		</jstl:otherwise>
+		</jstl:choose>
+		
+	</display:column>
+
+	<security:authorize access="hasRole('MANAGER')">
+		<spring:message code="service.manager" var="manager" />
+		<display:column title="${manager}" sortable="false">
+			<a href="service/manager/edit.do?serviceId=${row.id}"><spring:message
+					code="service.edit" /></a>
+		</display:column>
+	</security:authorize>
+
+
+
 
 </display:table>
 

@@ -14,13 +14,16 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import services.CategoryService;
 import services.ServiceService;
 import controllers.AbstractController;
+import domain.Category;
 import domain.Service;
 
 @Controller
@@ -31,6 +34,9 @@ public class ServiceManagerController extends AbstractController {
 
 	@Autowired
 	private ServiceService	serviceService;
+
+	@Autowired
+	private CategoryService	categoryService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -56,6 +62,72 @@ public class ServiceManagerController extends AbstractController {
 		return result;
 	}
 
+	// Editing ----------------------------------------------------------------
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public ModelAndView create() {
+		ModelAndView result;
+		Service service;
+
+		service = this.serviceService.create();
+		result = this.createEditModelAndView(service);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@RequestParam final int serviceId) {
+		final ModelAndView result;
+		Service service;
+
+		service = this.serviceService.findOne(serviceId);
+		result = this.createEditModelAndView(service);
+
+		return result;
+	}
+
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
+	public ModelAndView edit(Service service, final BindingResult binding) {
+		ModelAndView result;
+
+		try {
+			service = this.serviceService.reconstruct(service, binding);
+		} catch (final Throwable oops) {
+			result = this.createEditModelAndView(service, "service.commit.error");
+		}
+		if (binding.hasErrors())
+			result = this.createEditModelAndView(service);
+		else
+			try {
+				this.serviceService.save(service);
+				result = new ModelAndView("redirect:/service/manager/list.do");
+			} catch (final Throwable oops) {
+				result = this.createEditModelAndView(service, "service.commit.error");
+			}
+
+		return result;
+	}
+
 	// Ancillary Methods ------------------------------------------------------
+
+	protected ModelAndView createEditModelAndView(final Service service) {
+		ModelAndView result;
+
+		result = this.createEditModelAndView(service, null);
+
+		return result;
+	}
+
+	protected ModelAndView createEditModelAndView(final Service service, final String messageCode) {
+		ModelAndView result;
+		Collection<Category> categories;
+
+		categories = this.categoryService.findAll();
+		result = new ModelAndView("service/edit");
+		result.addObject("service", service);
+		result.addObject("message", messageCode);
+		result.addObject("categories", categories);
+
+		return result;
+	}
 
 }

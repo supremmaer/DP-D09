@@ -10,6 +10,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Validator;
 
 import repositories.ServiceRepository;
 import domain.Manager;
@@ -30,6 +32,9 @@ public class ServiceService {
 
 	@Autowired
 	private RendezvousService	rendezvousService;
+
+	@Autowired
+	private Validator			validator;
 
 
 	//Constructors
@@ -122,4 +127,25 @@ public class ServiceService {
 		return result;
 	}
 
+	public domain.Service reconstruct(final domain.Service service, final BindingResult binding) {
+		domain.Service result;
+		Manager principal;
+
+		if (service.getId() == 0) {
+			result = service;
+			principal = this.managerService.findByPrincipal();
+			result.setManager(principal);
+		} else {
+
+			result = this.findOne(service.getId());
+
+			result.setDescription(service.getDescription());
+			result.setName(service.getName());
+			result.setCategory(service.getCategory());
+			result.setPicture(service.getPicture());
+
+		}
+		this.validator.validate(result, binding);
+		return result;
+	}
 }
