@@ -10,6 +10,8 @@
 
 package controllers.manager;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import services.ServiceService;
 import controllers.AbstractController;
+import domain.Service;
 
 @Controller
 @RequestMapping("/service/manager")
@@ -43,8 +46,13 @@ public class ServiceManagerController extends AbstractController {
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ModelAndView list(@RequestParam(required = false) final Integer categoryId) {
 		ModelAndView result;
+		Collection<Service> services;
+
 		result = new ModelAndView("service/list");
+		services = this.serviceService.findByManager();
+
 		result.addObject("requestURI", "service/manager/list.do");
+		result.addObject("services", services);
 		return result;
 	}
 

@@ -62,9 +62,11 @@ public class ServiceService {
 
 		return result;
 	}
-	public Collection<domain.Service> findByManager(final Manager manager) {
+	public Collection<domain.Service> findByManager() {
 		Collection<domain.Service> result;
+		Manager manager;
 
+		manager = this.managerService.findByPrincipal();
 		result = this.serviceRepository.findByManager(manager.getId());
 		Assert.notNull(result);
 

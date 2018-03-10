@@ -74,6 +74,9 @@
 		<security:intercept-url pattern="/question/list.do" access="permitAll" />
 		<security:intercept-url pattern="/question/user/edit.do" access="hasRole('USER')" />
 		<security:intercept-url pattern="/question/user/create.do" access="hasRole('USER')" />
+		
+		<!-- MANAGER -->
+		<security:intercept-url pattern="/service/manager/**" access="hasRole('MANAGER')" />
 				
 		<!-- Autentificado -->
 		<security:intercept-url pattern="/profile/action-1.do" access="isAuthenticated()" /> 
