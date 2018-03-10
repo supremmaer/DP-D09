@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.CategoryService;
 import services.RSVPService;
 import services.RendezvousService;
 import domain.Actor;
+import domain.Category;
 import domain.RSVP;
 import domain.Rendezvous;
 import domain.User;
@@ -42,7 +44,8 @@ public class RendezvousController extends AbstractController {
 
 	@Autowired
 	private RSVPService			rsvpService;
-
+	@Autowired
+	private CategoryService			categoryService;
 
 	// Constructors -----------------------------------------------------------
 
@@ -59,12 +62,15 @@ public class RendezvousController extends AbstractController {
 
 		rendezvouses = rendezvousId == null ? this.rendezvousService.findAllFinal() : this.rendezvousService.findSimilar(rendezvousId);
 
-		if (categoryId != null) //TODO: Y este fallo?
-			rendezvouses = null;//this.rendezvousService.findByCategoryId(categoryId);
+		if (categoryId != null) 
+			rendezvouses = this.rendezvousService.findByCategoryId(categoryId);
 
 		result = new ModelAndView("rendezvous/list");
 		result.addObject("rendezvouses", rendezvouses);
 		result.addObject("requestURI", "rendezvous/list.do");
+		Collection<Category> categories= categoryService.findAll();
+		result.addObject("categories",categories);
+		
 		return result;
 	}
 

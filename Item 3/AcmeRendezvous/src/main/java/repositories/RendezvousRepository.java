@@ -32,7 +32,7 @@ public interface RendezvousRepository extends JpaRepository<Rendezvous, Integer>
 	Collection<Rendezvous> findByCategoryId(int categoryId);
 
 	@Query("select DISTINCT r.rendezvous from Request r where r.service.category.name =?1")
-	Collection<Rendezvous> findByCategoryName(int categoryName);
+	Collection<Rendezvous> findByCategoryName(String categoryName);
 
 	// Dashboard -----------------------------------------------------------
 

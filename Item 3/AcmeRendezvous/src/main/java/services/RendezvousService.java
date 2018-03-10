@@ -306,5 +306,20 @@ public class RendezvousService {
 
 		return result;
 	}
+	public Collection<Rendezvous> findByCategoryId(final int categoryId) {
+		Collection<Rendezvous> result;
 
+		result = this.rendezvousRepository.findByCategoryId(categoryId);
+		Assert.notNull(result);
+
+		return result;
+	}
+	public Collection<Rendezvous> findByCategoryName(final String categoryName) {
+		Collection<Rendezvous> result;
+
+		result = this.rendezvousRepository.findByCategoryName(categoryName);
+		Assert.notNull(result);
+
+		return result;
+	}
 }

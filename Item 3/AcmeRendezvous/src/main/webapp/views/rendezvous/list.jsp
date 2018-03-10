@@ -13,6 +13,18 @@
 
 <!--  Listing grid -->
 
+<spring:message	code="rendezvous.orderByCategory" />
+<form action="rendezvous/list.do">
+  <select name="categoryId">
+  
+  <jstl:forEach items="${categories}" var="cat">
+						<option value="${cat.id}"><jstl:out value="${cat.name}"/></option>
+						
+					</jstl:forEach>
+  
+  </select>
+  <input type="submit" value="Submit">
+</form>
 <display:table pagesize="5" class="displaytag" keepStatus="true" name="rendezvouses" requestURI="${requestURI}" id="row">
 
 <!-- Attributes -->
