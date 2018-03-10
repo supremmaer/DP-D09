@@ -153,11 +153,14 @@ public class CategoryService {
 			result = this.findOne(category.getId());
 			if (category.getParent() != null)
 				Assert.isTrue(!this.findBranch(result).contains(category.getParent()));
-			result.setDescription(category.getDescription());
-			result.setName(category.getName());
-			result.setParent(category.getParent());
+			//			result.setDescription(category.getDescription());
+			//			result.setName(category.getName());
+			//			result.setParent(category.getParent());
+			category.setVersion(result.getVersion());
+			category.setCategories(result.getCategories());
 		}
-		this.validator.validate(result, binding);
-		return result;
+
+		this.validator.validate(category, binding);
+		return category;
 	}
 }
