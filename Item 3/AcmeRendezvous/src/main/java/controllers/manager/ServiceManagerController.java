@@ -89,11 +89,11 @@ public class ServiceManagerController extends AbstractController {
 	public ModelAndView edit(Service service, final BindingResult binding) {
 		ModelAndView result;
 
-		try {
-			service = this.serviceService.reconstruct(service, binding);
-		} catch (final Throwable oops) {
-			result = this.createEditModelAndView(service, "service.commit.error");
-		}
+		//		try {
+		service = this.serviceService.reconstruct(service, binding);
+		//		} catch (final Throwable oops) {
+		//			result = this.createEditModelAndView(service, "service.commit.error");
+		//		}
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(service);
 		else

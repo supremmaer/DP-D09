@@ -97,7 +97,7 @@ public class ServiceService {
 
 		principal = this.managerService.findByPrincipal();
 		Assert.isTrue(principal.getId() == service.getManager().getId());
-		result = this.serviceRepository.save(service);
+		result = this.serviceRepository.saveAndFlush(service);
 		return result;
 	}
 
@@ -139,13 +139,17 @@ public class ServiceService {
 
 			result = this.findOne(service.getId());
 
-			result.setDescription(service.getDescription());
-			result.setName(service.getName());
-			result.setCategory(service.getCategory());
-			result.setPicture(service.getPicture());
+			//			result.setDescription(service.getDescription());
+			//			result.setName(service.getName());
+			//			result.setCategory(service.getCategory());
+			//			result.setPicture(service.getPicture());
+
+			service.setCancelled(result.isCancelled());
+			service.setManager(result.getManager());
+			service.setVersion(result.getVersion());
 
 		}
-		this.validator.validate(result, binding);
-		return result;
+		this.validator.validate(service, binding);
+		return service;
 	}
 }
