@@ -41,7 +41,7 @@
 	<jstl:url value="${row.picture}" var="pictureURL"></jstl:url>
 	<spring:message code="service.picture" var="picture" />
 	<display:column title="${picture}" sortable="false">
-		<a href="${pictureURL }"><jstl:out value="${row.picture}" /></a>
+		<img src="<jstl:out value="${row.picture}" />" />
 	</display:column>
 
 	<spring:message code="service.category" var="category" />
@@ -67,6 +67,13 @@
 		<display:column title="${manager}" sortable="false">
 			<a href="service/manager/edit.do?serviceId=${row.id}"><spring:message
 					code="service.edit" /></a>
+		</display:column>
+	</security:authorize>
+	
+	<security:authorize access="hasRole('USER')">
+		<display:column sortable="false">
+			<a href="service/user/request.do?serviceId=${row.id}"><spring:message
+					code="service.request" /></a>
 		</display:column>
 	</security:authorize>
 
