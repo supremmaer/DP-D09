@@ -61,6 +61,7 @@
 		<security:intercept-url pattern="/announcement/administrator/**" access="hasRole('ADMINISTRATOR')" />
 		<security:intercept-url pattern="/category/administrator/**" access="hasRole('ADMINISTRATOR')" />
 		<security:intercept-url pattern="/config/administrator/**" access="hasRole('ADMINISTRATOR')"/>
+		<security:intercept-url pattern="/service/administrator/cancel.do" access="hasRole('ADMINISTRATOR')" />
 
 		<!-- USUARIO -->
 		<security:intercept-url pattern="/comment/create.do" access="hasRole('USER')" /> 

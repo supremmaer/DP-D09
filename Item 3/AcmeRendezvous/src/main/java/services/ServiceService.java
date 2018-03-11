@@ -14,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 
 import repositories.ServiceRepository;
+import domain.Actor;
+import domain.Administrator;
 import domain.Manager;
 import domain.Rendezvous;
 import domain.Request;
@@ -35,6 +37,9 @@ public class ServiceService {
 
 	@Autowired
 	private Validator			validator;
+
+	@Autowired
+	private ActorService		actorService;
 
 
 	//Constructors
@@ -74,6 +79,22 @@ public class ServiceService {
 		manager = this.managerService.findByPrincipal();
 		result = this.serviceRepository.findByManager(manager.getId());
 		Assert.notNull(result);
+
+		return result;
+	}
+
+	public domain.Service cancel(final int serviceId) {
+		Actor actor;
+		domain.Service result, service;
+
+		actor = this.actorService.findByPrincipal();
+		service = this.findOne(serviceId);
+		Assert.notNull(service);
+		Assert.isTrue(service.getId() != 0);
+		Assert.isTrue(actor instanceof Administrator);
+
+		service.setCancelled(true);
+		result = this.serviceRepository.save(service);
 
 		return result;
 	}

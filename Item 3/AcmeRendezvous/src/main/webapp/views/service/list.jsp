@@ -70,7 +70,16 @@
 		</display:column>
 	</security:authorize>
 
-
+	<security:authorize access="hasRole('ADMINISTRATOR')">
+	<display:column>
+		<jstl:if test="${row.cancelled == false}">
+			<a href="service/administrator/cancel.do?serviceId=${row.id}">
+				<spring:message	code="service.cancel" />
+			</a>
+		</jstl:if>
+	</display:column>
+	
+</security:authorize>
 
 
 </display:table>
