@@ -100,10 +100,13 @@ public class ServiceService {
 	}
 
 	//DONE: Incluir Assert
-	public void delete(final domain.Service service) {
+	public void delete(final int id) {
 		Collection<Rendezvous> rendezvouses;
 		Manager principal;
+		domain.Service service;
 
+		service = this.serviceRepository.findOne(id);
+		Assert.notNull(service);
 		rendezvouses = this.rendezvousService.findByService(service);
 		principal = this.managerService.findByPrincipal();
 		Assert.isTrue(rendezvouses.isEmpty() && principal.getId() == service.getManager().getId());

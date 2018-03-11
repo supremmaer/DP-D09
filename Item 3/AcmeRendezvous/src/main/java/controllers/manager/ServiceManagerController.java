@@ -107,6 +107,20 @@ public class ServiceManagerController extends AbstractController {
 		return result;
 	}
 
+	@RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
+	public ModelAndView cancel(final Service service) {
+		ModelAndView result;
+
+		try {
+			this.serviceService.delete(service.getId());
+			result = new ModelAndView("redirect:/service/manager/list.do");
+		} catch (final IllegalArgumentException e) {
+			result = this.createEditModelAndView(service, "service.delete.error");
+		}
+
+		return result;
+	}
+
 	// Ancillary Methods ------------------------------------------------------
 
 	protected ModelAndView createEditModelAndView(final Service service) {
