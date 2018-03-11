@@ -12,22 +12,28 @@ package controllers.user;
 
 import java.util.Collection;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.ActorService;
+import services.CreditCardService;
 import services.RendezvousService;
 import services.RequestService;
 import services.ServiceService;
 import controllers.AbstractController;
+import domain.CreditCard;
 import domain.Rendezvous;
+import domain.Request;
 import domain.Service;
 import domain.User;
 import forms.RequestForm;
@@ -49,6 +55,9 @@ public class ServiceUserController extends AbstractController {
 
 	@Autowired
 	private ActorService		actorService;
+
+	@Autowired
+	private CreditCardService	creditCardService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -75,27 +84,44 @@ public class ServiceUserController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public ModelAndView request(@RequestParam final Integer serviceId) {
+	public ModelAndView request(@RequestParam final Integer serviceId, @CookieValue(value = "creditCard", required = false) final String creditCardId) {
 		Service service;
 		RequestForm requestForm;
 		ModelAndView result;
+		final CreditCard creditCard;
 
 		service = this.serviceService.findOne(serviceId);
 		requestForm = this.requestService.createForm(service);
+
+		if (creditCardId != null) {
+			creditCard = this.creditCardService.findOne(Integer.valueOf(creditCardId));
+			if (creditCard != null) {
+				requestForm.setHolderName(creditCard.getHolderName());
+				requestForm.setBrandName(creditCard.getBrandName());
+				requestForm.setNumber(creditCard.getNumber());
+				requestForm.setExpirationMonth(creditCard.getExpirationMonth());
+				requestForm.setExpirationYear(creditCard.getExpirationYear());
+				requestForm.setCVV(creditCard.getCVV());
+			}
+		}
 
 		result = this.createEditModelAndView(requestForm);
 		return result;
 	}
 
 	@RequestMapping(value = "/request", method = RequestMethod.POST, params = "save")
-	public ModelAndView request(@Valid final RequestForm requestForm, final BindingResult binding) {
+	public ModelAndView request(@Valid final RequestForm requestForm, final BindingResult binding, final HttpServletResponse response) {
 		ModelAndView result;
+		Request request;
+		Cookie cookie;
 
 		if (binding.hasErrors())
 			result = this.createEditModelAndView(requestForm);
 		else
 			try {
-				this.requestService.save(requestForm);
+				request = this.requestService.save(requestForm);
+				cookie = new Cookie("creditCard", String.valueOf(request.getCreditCard().getId()));
+				response.addCookie(cookie);
 				result = new ModelAndView("redirect:/service/user/list.do");
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(requestForm, "service.commit.error");
