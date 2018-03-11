@@ -90,6 +90,8 @@
 		<security:intercept-url pattern="/announcement/list.do" access="permitAll" /> 
 		
 		<security:intercept-url pattern="/gpscoordinates/user/**" access="hasRole('USER')" />
+		
+		<security:intercept-url pattern="/service/user/list.do" access="isAuthenticated()" />
 
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 

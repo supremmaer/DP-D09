@@ -47,9 +47,22 @@
 			<li><a href="actor/create.do?actorType=MANAGER"><spring:message
 						code="master.page.registrerManager" /></a></li>
 
-		</security:authorize>
+		</security:authorize>			
 
 		<security:authorize access="isAuthenticated()">
+			<li>
+				<a class="fNiv" href="service/user/list.do"><spring:message
+									code="master.page.user.service.list" /></a>
+				<security:authorize access="hasRole('MANAGER')">
+				<ul>				
+				<li class="arrow"></li>
+				<li><a href="service/manager/list.do"><spring:message
+								code="master.page.manager.service.list" /></a></li>
+				</ul>
+				</security:authorize>
+			</li>
+		
+		
 			<li><a class="fNiv"> <spring:message
 						code="master.page.profile" /> (<security:authentication
 						property="principal.username" />)
