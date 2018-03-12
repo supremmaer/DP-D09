@@ -4,11 +4,14 @@ package forms;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class ActorForm {
 
@@ -113,6 +116,8 @@ public class ActorForm {
 		this.agree = agree;
 	}
 
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	public Date getBirthDate() {
 		return this.birthDate;
 	}
@@ -120,12 +125,12 @@ public class ActorForm {
 	public void setBirthDate(final Date birthDate) {
 		this.birthDate = birthDate;
 	}
-	
+
 	public String getVatNumber() {
-		return vatNumber;
+		return this.vatNumber;
 	}
 
-	public void setVatNumber(String vatNumber) {
+	public void setVatNumber(final String vatNumber) {
 		this.vatNumber = vatNumber;
 	}
 
