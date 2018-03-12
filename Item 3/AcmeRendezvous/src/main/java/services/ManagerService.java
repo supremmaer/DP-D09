@@ -15,6 +15,7 @@ import repositories.ManagerRepository;
 import security.LoginService;
 import security.UserAccount;
 import domain.Manager;
+import forms.ActorForm;
 
 @Service
 @Transactional
@@ -84,13 +85,46 @@ public class ManagerService {
 
 		return result;
 	}
+	
+	public boolean ComprobadorDeVatNumber(final ActorForm actorForm) {
+		boolean result =true;
+		if(actorForm.getAuthority().equals("MANAGER")){
+			result= PatronOk(actorForm.getVatNumber());
+		}
+		return result;
+	}
+
+	
 	public boolean PatronOk(final String string) {
 		boolean isok = true;
-
+		boolean anteriorFueGuion = false;
 		for (int i = 0; i <= string.length() - 1; i++) {
+			
 			final char a = string.charAt(i);
-			if (!(Character.isAlphabetic(a) || Character.isDigit(a) || a == '-'))
+			if (!(Character.isAlphabetic(a) || Character.isDigit(a) || a == '-')||(string.length()<4)||(string.length()>30)){
 				isok = false;
+				break;
+			}
+			if((i==0)&&(a=='-')){
+				isok = false;
+				break;	
+			}
+			if((i==string.length()-1)&&(a=='-')){
+				isok = false;
+				break;
+			}
+			if(a=='-'){
+				if(anteriorFueGuion==true){
+					isok = false;
+					break;
+				}
+				if(anteriorFueGuion==false)
+					anteriorFueGuion=true;
+			}else{
+					anteriorFueGuion=false;
+				
+			}
+				
 		}
 		return isok;
 	}
