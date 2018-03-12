@@ -18,7 +18,6 @@ import domain.Actor;
 import domain.Administrator;
 import domain.Manager;
 import domain.Rendezvous;
-import domain.Request;
 
 @Service
 @Transactional
@@ -132,7 +131,6 @@ public class ServiceService {
 
 	public Collection<domain.Service> findMostSellers() {
 		final List<domain.Service> aux = new ArrayList<domain.Service>(this.findMostSellersOrder());
-		final Collection<Request> auxr = new ArrayList<Request>();
 		final Collection<domain.Service> result = new ArrayList<domain.Service>();
 		result.add(aux.get(0));
 		for (int i = 1; i < aux.size(); i++)
@@ -140,6 +138,11 @@ public class ServiceService {
 				break;
 			else
 				result.add(aux.get(i));
+		return result;
+	}
+
+	public Collection<domain.Service> findByManagerAndCancelledTrue(final int id) {
+		final Collection<domain.Service> result = this.serviceRepository.findByManagerAndCancelledTrue(id);
 		return result;
 	}
 

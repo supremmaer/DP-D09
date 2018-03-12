@@ -22,12 +22,14 @@ import services.ActorService;
 import services.AnnouncementService;
 import services.AnswerService;
 import services.CommentService;
+import services.ManagerService;
 import services.QuestionService;
 import services.RSVPService;
 import services.RendezvousService;
 import services.RequestService;
 import services.ServiceService;
 import services.UserService;
+import domain.Manager;
 import domain.Rendezvous;
 import domain.Service;
 
@@ -66,6 +68,9 @@ public class AdministratorController extends AbstractController {
 
 	@Autowired
 	private RequestService		requestService;
+
+	@Autowired
+	private ManagerService		managerService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -131,6 +136,10 @@ public class AdministratorController extends AbstractController {
 
 		Collection<Service> mostSellers = new ArrayList<Service>();
 
+		Collection<Manager> managersWithMoreServicesThanAVG = new ArrayList<Manager>();
+
+		Collection<Manager> managersMoreCancelledServices = new ArrayList<Manager>();
+
 		if (this.rendezvousService.findAll().size() > 0) {
 
 			avgRendezvousesperUser = this.rendezvousService.averageRendezvousesperUser();
@@ -168,6 +177,11 @@ public class AdministratorController extends AbstractController {
 			}
 			if (this.serviceService.findAll().size() > 0 && this.requestService.findAll().size() > 0)
 				mostSellers = this.serviceService.findMostSellers();
+
+			if (this.serviceService.findAll().size() > 0 && this.managerService.findAll().size() > 0)
+				managersWithMoreServicesThanAVG = this.managerService.managersWithMoreServicesThanAVG();
+			managersMoreCancelledServices = this.managerService.managersMoreCancelledServices();
+
 		}
 
 		result = new ModelAndView("administrator/dashboard");
@@ -202,6 +216,10 @@ public class AdministratorController extends AbstractController {
 		result.addObject("sdReplysperComment", sdReplysperComment);
 
 		result.addObject("mostSellers", mostSellers);
+
+		result.addObject("managersWithMoreServicesThanAVG", managersWithMoreServicesThanAVG);
+
+		result.addObject("managersMoreCancelledServices", managersMoreCancelledServices);
 
 		result.addObject("requestURI", "administrator/dashboard.do");
 		return result;

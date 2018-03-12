@@ -960,7 +960,7 @@
 	</bean>
 	<bean id="manager2" class="domain.Manager">
 		<property name="name" value="manager2 name" />
-		<property name="surname" value="manager 1 surname" />
+		<property name="surname" value="manager 2 surname" />
 		<property name="postalAddress" value="manager2Adrdress" />
 		<property name="phoneNumber" value="manager2PhoneNumber" />
 		<property name="emailAddress" value="manager2@email.com" />
@@ -970,7 +970,7 @@
 	</bean>
 	<bean id="manager3" class="domain.Manager">
 		<property name="name" value="manager3 name" />
-		<property name="surname" value="manager 1 surname" />
+		<property name="surname" value="manager 3 surname" />
 		<property name="postalAddress" value="manager3Adrdress" />
 		<property name="phoneNumber" value="manager3PhoneNumber" />
 		<property name="emailAddress" value="manager3@email.com" />
@@ -990,7 +990,7 @@
 	</bean>
 	<bean id="manager5" class="domain.Manager">
 		<property name="name" value="manager5 name" />
-		<property name="surname" value="manager 1 surname" />
+		<property name="surname" value="manager 5 surname" />
 		<property name="postalAddress" value="manager5 Adrdress" />
 		<property name="phoneNumber" value="manager5PhoneNumber" />
 		<property name="emailAddress" value="manager5@email.com" />
@@ -1166,6 +1166,38 @@
 		<property name="picture" value="http://url.com" />
 		<property name="cancelled" value="false" />
 		<property name="manager" ref="manager1" />
+		<property name="category" ref="category1" />
+	</bean>
+	<bean id="service7" class="domain.Service">
+		<property name="name" value="service7 name" />
+		<property name="description" value="description 7" />
+		<property name="picture" value="http://url.com" />
+		<property name="cancelled" value="True" />
+		<property name="manager" ref="manager2" />
+		<property name="category" ref="category2" />
+	</bean>
+	<bean id="service8" class="domain.Service">
+		<property name="name" value="service6 name" />
+		<property name="description" value="description 8" />
+		<property name="picture" value="http://url.com" />
+		<property name="cancelled" value="true" />
+		<property name="manager" ref="manager2" />
+		<property name="category" ref="category1" />
+	</bean>
+	<bean id="service9" class="domain.Service">
+		<property name="name" value="service6 name" />
+		<property name="description" value="description 9" />
+		<property name="picture" value="http://url.com" />
+		<property name="cancelled" value="true" />
+		<property name="manager" ref="manager1" />
+		<property name="category" ref="category1" />
+	</bean>
+	<bean id="service10" class="domain.Service">
+		<property name="name" value="service6 name" />
+		<property name="description" value="description 10" />
+		<property name="picture" value="http://url.com" />
+		<property name="cancelled" value="false" />
+		<property name="manager" ref="manager5" />
 		<property name="category" ref="category1" />
 	</bean>
 	

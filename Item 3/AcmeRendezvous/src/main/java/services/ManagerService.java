@@ -1,8 +1,9 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +22,9 @@ public class ManagerService {
 
 	@Autowired
 	private ManagerRepository	managerRepository;
+
+	@Autowired
+	private ServiceService		serviceService;
 
 
 	//Constructors
@@ -53,15 +57,13 @@ public class ManagerService {
 		return result;
 	}
 
-
 	public Manager save(final Manager manager) {
 		Manager result;
-		String vatNumber=manager.getVatNumber();
+		final String vatNumber = manager.getVatNumber();
 		Assert.notNull(vatNumber);
-		
+
 		Assert.isTrue(this.PatronOk(vatNumber));
-		
-		
+
 		result = this.managerRepository.save(manager);
 		return result;
 	}
@@ -82,15 +84,42 @@ public class ManagerService {
 
 		return result;
 	}
-	public boolean PatronOk(String string){
-		boolean isok=true;
-	
-		for(int i=0;i<= string.length()-1;i++){
-			char a =string.charAt(i);
-			if(!(Character.isAlphabetic(a)||Character.isDigit(a)||a=='-')){
-				 isok=false;
-			}
-	}
+	public boolean PatronOk(final String string) {
+		boolean isok = true;
+
+		for (int i = 0; i <= string.length() - 1; i++) {
+			final char a = string.charAt(i);
+			if (!(Character.isAlphabetic(a) || Character.isDigit(a) || a == '-'))
+				isok = false;
+		}
 		return isok;
+	}
+
+	public Double avgServicePerManager() {
+		final Double result = this.managerRepository.avgServicePerManager();
+		return result;
+	}
+
+	public Collection<Manager> managersWithMoreServicesThanAVG() {
+		final Double avg = this.avgServicePerManager();
+		final Collection<Manager> result = this.managerRepository.managersWithMoreServicesThanAVG(avg);
+		return result;
+	}
+
+	public Collection<Manager> managersMoreCancelledServicesOrder() {
+		final Collection<Manager> result = this.managerRepository.managersMoreCancelledServicesOrder();
+		return result;
+	}
+
+	public Collection<Manager> managersMoreCancelledServices() {
+		final List<Manager> aux = new ArrayList<Manager>(this.managersMoreCancelledServicesOrder());
+		final Collection<Manager> result = new ArrayList<Manager>();
+		result.add(aux.get(0));
+		for (int i = 1; i < aux.size(); i++)
+			if (this.serviceService.findByManagerAndCancelledTrue(aux.get(0).getId()).size() != this.serviceService.findByManagerAndCancelledTrue(aux.get(i).getId()).size())
+				break;
+			else
+				result.add(aux.get(i));
+		return result;
 	}
 }

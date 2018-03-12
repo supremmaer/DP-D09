@@ -110,6 +110,28 @@
 </display:table>
 <br/><br/><br/>
 
+<b><spring:message code="administrator.MWMSAVG"/></b>
+<display:table pagesize="5" class="displaytag" keepStatus="true"
+	name="managersWithMoreServicesThanAVG" requestURI="${requestURI}" id="row">
+	
+	<b><spring:message code="administrator.MWMSAVG" var="title"/></b>
+	<display:column title="${title}">
+		<a href="manager/display.do?managerId=${row.id}">${row.name}</a>
+	</display:column>
+</display:table>
+<br/><br/><br/>
+
+<b><spring:message code="administrator.MMCS"/></b>
+<display:table pagesize="5" class="displaytag" keepStatus="true"
+	name="managersMoreCancelledServices" requestURI="${requestURI}" id="row">
+	
+	<b><spring:message code="administrator.MMCS" var="title"/></b>
+	<display:column title="${title}">
+		<a href="manager/display.do?managerId=${row.id}">${row.name}</a>
+	</display:column>
+</display:table>
+<br/><br/><br/>
+
 
 </security:authorize>
 	
