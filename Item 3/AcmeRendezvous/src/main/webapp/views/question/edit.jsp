@@ -23,9 +23,9 @@
 	<acme:textarea code="question.text" path="text"/>
 	
 	<acme:submit name="save" code="question.save"/>
-	
-	<acme:submit name="delete" code="question.delete"/>
-	
+	<jstl:if test="${question.id!=0}">
+		<acme:submit name="delete" code="question.delete"/>
+	</jstl:if>
 	<acme:cancel url="question/list.do?rendezvousId=${question.rendezvous.id}" code="question.cancel"/>
 	
 </form:form>
