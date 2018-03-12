@@ -105,16 +105,19 @@ public class ActorController extends AbstractController {
 	public ModelAndView register(@Valid final ActorForm actorForm, final BindingResult binding) {
 		ModelAndView result;
 		Actor actor;
-		String vatNumber=actorForm.getVatNumber();
+		String vatNumber=null;
+		if(actorForm.getVatNumber()!=null){
+		 vatNumber=actorForm.getVatNumber();
+		}
 		if (binding.hasErrors()){
 			result = this.createRegisterModelAndView(actorForm);
 		
 		
 		
-		}else if(vatNumber.isEmpty()&& actorForm.getAuthority().equals("MANAGER")){
+		}else if(vatNumber==null && actorForm.getAuthority().equals("MANAGER")){
 				result = this.createRegisterModelAndView(actorForm, "actor.vatNumberEmpty");
 			
-		}else if(!(managerService.PatronOk(actorForm.getVatNumber()))){
+		}else if(!(managerService.ComprobadorDeVatNumber(actorForm))){
 			result = this.createRegisterModelAndView(actorForm, "actor.vatNumberPatronError");
 					
 			
@@ -141,6 +144,7 @@ public class ActorController extends AbstractController {
 			}}
 		return result;
 	}
+	
 	//	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	//	public ModelAndView edit() throws Exception {
 	//		ModelAndView result;
