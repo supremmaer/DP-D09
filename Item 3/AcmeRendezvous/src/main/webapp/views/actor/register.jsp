@@ -53,7 +53,7 @@
 	<form:label path="birthDate">
 		<spring:message code="actor.birthDate" />
 	</form:label>
-	<form:input path="birthDate" placeholder="dd/mm/yyyy HH:MM"/>
+	<form:input path="birthDate" placeholder="dd/mm/yyyy"/>
 	<form:errors cssClass="error" path="birthDate" />
 	<br />
 	<form:label path="email">
