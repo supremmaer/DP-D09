@@ -27,6 +27,11 @@
 <display:table pagesize="5" class="displaytag" keepStatus="true"
 	name="services" requestURI="${requestURI}" id="row">
 
+	<jstl:choose>
+		<jstl:when test="${row.cancelled}">
+		<tr class='red'>
+		</jstl:when>
+	</jstl:choose>
 
 	<spring:message code="service.name" var="name" />
 	<display:column title="${name}" sortable="false">

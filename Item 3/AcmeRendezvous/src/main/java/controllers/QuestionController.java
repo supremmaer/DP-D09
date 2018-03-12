@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import services.ActorService;
 import services.QuestionService;
 import services.RendezvousService;
+import domain.Actor;
 import domain.Question;
 import domain.Rendezvous;
 import domain.User;
@@ -45,6 +46,7 @@ public class QuestionController extends AbstractController {
 	public ModelAndView list(@RequestParam final int rendezvousId) {
 		ModelAndView result;
 		Collection<Question> questions;
+		Actor actor;
 		User user;
 		Rendezvous rendezvous;
 
@@ -55,11 +57,16 @@ public class QuestionController extends AbstractController {
 		result.addObject("questions", questions);
 		result.addObject("requestURI", "question/list.do");
 		if (this.actorService.isLogged()) {
-			user = (User) this.actorService.findByPrincipal();
-			if (user.getId() == rendezvous.getUser().getId()) {
-				result.addObject("rendezvous", rendezvous);
-				result.addObject("userId", user.getId());
+			actor = this.actorService.findByPrincipal();
+			if (actor instanceof User) {
+				user = (User) actor;
+				if (user.getId() == rendezvous.getUser().getId()) {
+					result.addObject("rendezvous", rendezvous);
+					result.addObject("userId", user.getId());
+				}
 			}
+			result.addObject("rendezvous", rendezvous);
+			result.addObject("userId", actor.getId());
 		}
 		return result;
 	}
