@@ -1,6 +1,7 @@
 
 package services;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -43,7 +44,7 @@ public class CategoryService {
 		Category result;
 
 		result = new Category();
-		result.setCategories(new HashSet<Category>());
+		//result.setCategories(new HashSet<Category>());
 
 		return result;
 	}
@@ -79,7 +80,7 @@ public class CategoryService {
 		Assert.isTrue(actor instanceof Administrator);
 		//		if (category.getId() != 0 && category.getParent() != null)
 		//			Assert.isTrue(!this.findBranch(category).contains(category.getParent()));
-		result = this.categoryRepository.save(category);
+		result = this.categoryRepository.saveAndFlush(category);
 
 		return result;
 	}
@@ -144,10 +145,13 @@ public class CategoryService {
 	}
 	public Category reconstruct(final Category category, final BindingResult binding) {
 		Category result;
+		Collection<Category> categories;
 
 		if (category.getId() == 0) {
+			categories = new ArrayList<Category>();
 			result = category;
-			result.setCategories(new HashSet<Category>());
+
+			result.setCategories(categories);
 		} else {
 
 			result = this.findOne(category.getId());
