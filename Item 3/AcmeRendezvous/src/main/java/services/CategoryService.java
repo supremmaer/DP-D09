@@ -56,7 +56,7 @@ public class CategoryService {
 
 		return result;
 	}
-	//TODO: Incluir Assert
+
 	public void delete(final int categoryId) {
 		Category category;
 		Actor actor;
@@ -71,7 +71,7 @@ public class CategoryService {
 		this.categoryRepository.delete(category);
 
 	}
-	//TODO: Incluir Assert
+
 	public Category save(final Category category) {
 		Category result;
 		Actor actor;
