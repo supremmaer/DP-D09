@@ -34,6 +34,17 @@
 	
 </security:authorize>
 
+<security:authorize access="hasRole('ADMINISTRATOR')">
+	<jstl:if test="${rendezvous.finalVersion==false}">
+	<display:column>
+			<a href="question/administrator/delete.do?questionId=${row.id}">
+				<spring:message	code="question.delete" />
+			</a>
+	</display:column>
+	</jstl:if>
+	
+</security:authorize>
+
 </display:table>
 <br>
 <security:authorize access="hasRole('USER')">

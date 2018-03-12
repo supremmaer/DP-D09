@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import repositories.QuestionRepository;
 import domain.Actor;
+import domain.Administrator;
 import domain.Answer;
 import domain.Question;
 import domain.RSVP;
@@ -90,11 +91,10 @@ public class QuestionService {
 
 	public void delete(final Question question) {
 
-		//		final Actor actor;
+		final Actor actor;
 		Assert.notNull(question);
-		//		actor = this.actorService.findByPrincipal();
-		//el admin tambien puede borrar
-		//		Assert.isTrue(actor.getId() == question.getRendezvous().getUser().getId());
+		actor = this.actorService.findByPrincipal();
+		Assert.isTrue(actor.getId() == question.getRendezvous().getUser().getId() || actor instanceof Administrator);
 		//need admin to delete :borra tambien las respuestas(profesor fernando dio visto bueno)
 
 		final Collection<Answer> answers = this.answerService.findByQuestionId(question.getId());
