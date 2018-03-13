@@ -1,14 +1,5 @@
-/*
- * SampleTest.java
- * 
- * Copyright (C) 2017 Universidad de Sevilla
- * 
- * The use of this project is hereby constrained to the conditions of the
- * TDG Licence, a copy of which you may download from
- * http://www.tdg-seville.info/License.html
- */
 
-package sample;
+package services;
 
 import javax.transaction.Transactional;
 
@@ -17,14 +8,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
+
 
 import domain.Answer;
 
-import domain.Question;
+
 
 import services.AnswerService;
-import services.CommentService;
+
 import services.QuestionService;
 import utilities.AbstractTest;
 
@@ -53,7 +44,8 @@ public class AnswerTest extends AbstractTest {
 			, {
 				//un usuario sin rsvp iniciado 
 				"user7", "question1","RSVP1", IllegalArgumentException.class
-		}
+			}
+			//Caso positivo (deberia ir)
 				, {
 					"user7", "question12","RSVP7", null
 			}
@@ -96,11 +88,11 @@ public class AnswerTest extends AbstractTest {
 	// Ancillary methods ------------------------------------------------------
 	protected void createAndSaveTemplate(final String beanName, final String question,final String RSVP, final Class<?> expected) {
 		Class<?> caught;
-		int dbId;
+	
 		
 		caught = null;
 		try {
-			dbId = super.getEntityId(beanName);
+			
 			Integer questionId = super.getEntityId(question);
 			Integer rsvpId = super.getEntityId(RSVP);
 	

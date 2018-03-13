@@ -80,7 +80,7 @@ public class CategoryService {
 		Assert.isTrue(actor instanceof Administrator);
 		//		if (category.getId() != 0 && category.getParent() != null)
 		//			Assert.isTrue(!this.findBranch(category).contains(category.getParent()));
-		result = this.categoryRepository.saveAndFlush(category);
+		result = this.categoryRepository.save(category);
 
 		return result;
 	}

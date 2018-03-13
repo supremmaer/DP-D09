@@ -8,7 +8,9 @@
  * http://www.tdg-seville.info/License.html
  */
 
-package sample;
+package services;
+
+import java.util.HashSet;
 
 import javax.transaction.Transactional;
 
@@ -19,6 +21,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.Assert;
 
+import domain.Category;
 import domain.Comment;
 
 import services.CommentService;
@@ -29,11 +32,11 @@ import utilities.AbstractTest;
 })
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
-public class CommentTest extends AbstractTest {
+public class CategoryTest extends AbstractTest {
 
 	// System under test ------------------------------------------------------
 	@Autowired
-  CommentService commentService;
+  CategoryService categoryService;
 	// Tests ------------------------------------------------------------------
 
 
@@ -41,41 +44,41 @@ public class CommentTest extends AbstractTest {
 	public void CreateAndSaveDriver() {
 		final Object testingData1[][] = {
 			{
-				//Un admin no puede crear
-				"admin", "rendezvous1", IllegalArgumentException.class
+				//Un user no puede crear
+				"user1",  IllegalArgumentException.class
 			},{
-				//Un admin no puede crear
-				"admin", "rendezvous2", IllegalArgumentException.class
+				//Un user no puede crear
+				"user2",  IllegalArgumentException.class
 			}, {
-				//un usuario que no tiene rsvp
-				"user7", "rendezvous2", IllegalArgumentException.class
+				//un user no puede crear
+				"user3",  IllegalArgumentException.class
 			}, {
-				"user1", "rendezvous1", null
+				"admin",  null
 			}, {
-				"user3", "rendezvous1", null
+				"admin",  null
 			}
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
-			this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (Class<?>) testingData1[i][2]);
+			this.createAndSaveTemplate((String) testingData1[i][0], (Class<?>) testingData1[i][1]);
 	}
 	@Test
 	public void DeleteDriver() {
 		final Object testingData2[][] = {
 			{
 				//Un user no puede borrar
-				"user1", "comment1", IllegalArgumentException.class
+				"user1", "category4", IllegalArgumentException.class
 			}, {
 				//un usuario no puede borrar
-				"user1", "comment2", IllegalArgumentException.class
+				"user3", "category2", IllegalArgumentException.class
 			}, {
-				//un usuario no puede borrar
-				"user1", "comment2", IllegalArgumentException.class
+				//si tiene hijos no se puede borrar
+				"admin", "category1", IllegalArgumentException.class
 			
 			}, {
-				"admin", "comment2", null
+				"admin", "category8", null
 			}, {
-				"admin", "comment1", null
+				"admin", "category7", null
 			}
 		};
 
@@ -84,18 +87,20 @@ public class CommentTest extends AbstractTest {
 	}
 
 	// Ancillary methods ------------------------------------------------------
-	protected void createAndSaveTemplate(final String beanName, final String rendezvous, final Class<?> expected) {
+	protected void createAndSaveTemplate(final String beanName, final Class<?> expected) {
 		Class<?> caught;
-		int dbId;
+	
 		
 		caught = null;
 		try {
-			dbId = super.getEntityId(beanName);
-			Integer rendezvousId = super.getEntityId(rendezvous);
+		
+			
 	
 			authenticate(beanName);
-			Comment comment=commentService.create(rendezvousId, null);
-			commentService.save(comment);
+			Category category=categoryService.create();
+			category.setCategories(new HashSet<Category>());
+			category.setParent(null);
+			categoryService.save(category);
 			unauthenticate();
 		
 		} catch (final Throwable oops) {
@@ -106,19 +111,17 @@ public class CommentTest extends AbstractTest {
 	}
 	
 	
-	protected void deleteTemplate(final String beanName, final String commentString, final Class<?> expected) {
+	protected void deleteTemplate(final String beanName, final String categoryString, final Class<?> expected) {
 		Class<?> caught;
 		int dbId;
-		
+	
 		caught = null;
 		try {
-			dbId = super.getEntityId(beanName);
-			Integer commentId = super.getEntityId(commentString);
-			Comment comment = this.commentService.findOne(commentId);
+			dbId = super.getEntityId(categoryString);
+			//Category category = this.categoryService.findOne(dbId);
 	
 			authenticate(beanName);
-			commentService.delete(comment);
-		
+			categoryService.delete(dbId);
 			unauthenticate();
 		
 		} catch (final Throwable oops) {
