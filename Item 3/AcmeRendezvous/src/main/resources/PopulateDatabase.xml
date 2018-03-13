@@ -470,43 +470,43 @@
 	
 	
 
-	<!-- Annoucement -->
-	<bean id="annoucement1" class="domain.Announcement">
+	<!-- announcement -->
+	<bean id="announcement1" class="domain.Announcement">
 		<property name="title" value="title1" />
 		<property name="description" value="description1" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement2" class="domain.Announcement">
+	<bean id="announcement2" class="domain.Announcement">
 		<property name="title" value="title2" />
 		<property name="description" value="description2" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement3" class="domain.Announcement">
+	<bean id="announcement3" class="domain.Announcement">
 		<property name="title" value="title3" />
 		<property name="description" value="description3" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement4" class="domain.Announcement">
+	<bean id="announcement4" class="domain.Announcement">
 		<property name="title" value="title4" />
 		<property name="description" value="description4" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement5" class="domain.Announcement">
+	<bean id="announcement5" class="domain.Announcement">
 		<property name="title" value="title5" />
 		<property name="description" value="description5" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement6" class="domain.Announcement">
+	<bean id="announcement6" class="domain.Announcement">
 		<property name="title" value="title6" />
 		<property name="description" value="description6" />
 		<property name="moment" value="01/05/2014" />
@@ -681,12 +681,12 @@
 		<property name="deleted" value="false" />
 		<property name="announcements">
 			<list>
-				<ref bean="annoucement1" />
-				<ref bean="annoucement2" />
-				<ref bean="annoucement3" />
-				<ref bean="annoucement4" />
-				<ref bean="annoucement5" />
-				<ref bean="annoucement6" />
+				<ref bean="announcement1" />
+				<ref bean="announcement2" />
+				<ref bean="announcement3" />
+				<ref bean="announcement4" />
+				<ref bean="announcement5" />
+				<ref bean="announcement6" />
 			</list>
 		</property>
 		<property name="rendezvouses">
@@ -859,7 +859,29 @@
 		<property name="user" ref="user2" />
 		<property name="GPSCoordinates" ref="gpscoordinates6" />
 	</bean>
-	
+	<bean id="rendezvous8" class="domain.Rendezvous">
+		<property name="name" value="rendezvous8" />
+		<property name="description" value="description8" />
+		<property name="moment" value="01/05/2020" />
+		<property name="picture" value="http://www.picture1.com" />
+		<property name="adultOnly" value="false" />
+		<property name="finalVersion" value="false" />
+		<property name="deleted" value="true" />
+		<property name="announcements">
+			<list>
+			</list>
+		</property>
+		<property name="rendezvouses">
+			<list>
+			</list>
+		</property>
+		<property name="questions">
+			<list>
+				<ref bean="question12" />
+			</list>
+		</property>
+		<property name="user" ref="user2" />
+	</bean>
 
 	
 	<!-- RSVP -->

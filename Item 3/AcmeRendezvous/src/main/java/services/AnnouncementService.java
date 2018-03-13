@@ -73,7 +73,7 @@ public class AnnouncementService {
 		Assert.isTrue(actor != null);
 		Assert.notNull(rendezvous);
 		Assert.isTrue(rendezvous.getUser().getId() == actor.getId());
-		Assert.isTrue(!(rendezvous.isFinalVersion()) || !(rendezvous.isDeleted()));
+		Assert.isTrue(!(rendezvous.isDeleted()));
 
 		announcement.setMoment(new Date());
 		result = this.announcementRepository.save(announcement);
@@ -129,6 +129,10 @@ public class AnnouncementService {
 	public Double standardDeviationAnnouncementperRendezvous() {
 		final Double result = this.announcementRepository.standardDeviationAnnoucementsperRendezvous();
 		return result;
+	}
+
+	public void flush() {
+		this.announcementRepository.flush();
 	}
 
 }
