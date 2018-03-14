@@ -10,22 +10,19 @@
 
 package services;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.util.Assert;
 
-import domain.Category;
-import domain.Comment;
-
-import services.CommentService;
 import utilities.AbstractTest;
+import domain.Category;
 
 @ContextConfiguration(locations = {
 	"classpath:spring/junit.xml"
@@ -36,49 +33,55 @@ public class CategoryTest extends AbstractTest {
 
 	// System under test ------------------------------------------------------
 	@Autowired
-  CategoryService categoryService;
-	// Tests ------------------------------------------------------------------
+	CategoryService	categoryService;
 
+
+	// Tests ------------------------------------------------------------------
 
 	@Test
 	public void CreateAndSaveDriver() {
 		final Object testingData1[][] = {
 			{
+				"admin", "alfonso", "description", null
+
+			}, {
+				//	Un user no puede crear
+				"user1", "nameX", "descriptionX", IllegalArgumentException.class
+			}, {
 				//Un user no puede crear
-				"user1",  IllegalArgumentException.class
-			},{
-				//Un user no puede crear
-				"user2",  IllegalArgumentException.class
+				"user2", "nameX", "descriptionX", IllegalArgumentException.class
 			}, {
-				//un user no puede crear
-				"user3",  IllegalArgumentException.class
+				//un manager no puede crear
+				"manager1", "nameX", "descriptionX", IllegalArgumentException.class
 			}, {
-				"admin",  null
+				"admin", "", "descriptionX", ConstraintViolationException.class
 			}, {
-				"admin",  null
+				"admin", "nameX", "", ConstraintViolationException.class
 			}
+
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
-			this.createAndSaveTemplate((String) testingData1[i][0], (Class<?>) testingData1[i][1]);
+			this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (String) testingData1[i][2], (Class<?>) testingData1[i][3]);
 	}
 	@Test
 	public void DeleteDriver() {
 		final Object testingData2[][] = {
 			{
+
+				"admin", "category8", null
+			}, {
+				"admin", "category7", null
+			}, {
 				//Un user no puede borrar
 				"user1", "category4", IllegalArgumentException.class
 			}, {
 				//un usuario no puede borrar
-				"user3", "category2", IllegalArgumentException.class
+				"admin", "category2", IllegalArgumentException.class
 			}, {
 				//si tiene hijos no se puede borrar
 				"admin", "category1", IllegalArgumentException.class
-			
-			}, {
-				"admin", "category8", null
-			}, {
-				"admin", "category7", null
+
 			}
 		};
 
@@ -87,43 +90,42 @@ public class CategoryTest extends AbstractTest {
 	}
 
 	// Ancillary methods ------------------------------------------------------
-	protected void createAndSaveTemplate(final String beanName, final Class<?> expected) {
+	protected void createAndSaveTemplate(final String beanName, final String name, final String description, final Class<?> expected) {
 		Class<?> caught;
-	
-		
+
 		caught = null;
 		try {
-		
-			
-	
-			authenticate(beanName);
-			Category category=categoryService.create();
-			category.setCategories(new HashSet<Category>());
+
+			this.authenticate(beanName);
+			final Category category = this.categoryService.create();
+			category.setCategories(new ArrayList<Category>());
 			category.setParent(null);
-			categoryService.save(category);
-			unauthenticate();
-		
+			category.setName(name);
+			category.setDescription(description);
+			this.categoryService.save(category);
+			this.categoryService.flush();
+			this.unauthenticate();
+
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}
 
 		this.checkExceptions(expected, caught);
 	}
-	
-	
+
 	protected void deleteTemplate(final String beanName, final String categoryString, final Class<?> expected) {
 		Class<?> caught;
 		int dbId;
-	
+
 		caught = null;
 		try {
 			dbId = super.getEntityId(categoryString);
 			//Category category = this.categoryService.findOne(dbId);
-	
-			authenticate(beanName);
-			categoryService.delete(dbId);
-			unauthenticate();
-		
+
+			this.authenticate(beanName);
+			this.categoryService.delete(dbId);
+			this.unauthenticate();
+
 		} catch (final Throwable oops) {
 			caught = oops.getClass();
 		}

@@ -167,4 +167,7 @@ public class CategoryService {
 		this.validator.validate(category, binding);
 		return category;
 	}
+	public void flush() {
+		this.categoryRepository.flush();
+	}
 }
