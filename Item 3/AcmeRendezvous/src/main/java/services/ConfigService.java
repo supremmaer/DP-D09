@@ -48,7 +48,7 @@ public class ConfigService {
 
 		return result;
 	}
-	//TODO: Incluir Assert
+
 	public void delete(final Config config) {
 		Actor actor;
 
@@ -57,7 +57,7 @@ public class ConfigService {
 		this.configRepository.delete(config);
 
 	}
-	//TODO: Incluir Assert
+
 	public Config save(final Config config) {
 		Config result;
 		Actor actor;
