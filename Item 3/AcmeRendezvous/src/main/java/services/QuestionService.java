@@ -157,4 +157,8 @@ public class QuestionService {
 		return result;
 	}
 
+	public void flush() {
+		this.questionRepository.flush();
+	}
+
 }
