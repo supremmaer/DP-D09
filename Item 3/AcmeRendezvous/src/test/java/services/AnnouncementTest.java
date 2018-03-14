@@ -62,6 +62,9 @@ public class AnnouncementTest extends AbstractTest {
 				//Anuncio con descripcion blank
 				"user1", "rendezvous2", "title", "", ConstraintViolationException.class
 			}, {
+				//Anuncio para un rendezvous en modo final
+				"user1", "rendezvous1", "title123", "description123", null
+			}, {
 				//Usuario no creador del rendezvous
 				"user2", "rendezvous1", "title", "description", IllegalArgumentException.class
 			}, {
@@ -80,7 +83,15 @@ public class AnnouncementTest extends AbstractTest {
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+			//			this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (Class<?>) testingData[i][4]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 
 	@Test
