@@ -11,6 +11,7 @@
 package services;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,46 +47,66 @@ public class ServiceTest extends AbstractTest {
 		final Object testingData[][] = {
 
 			//			//un Manager crea un servicio correctamente
-			//			{
-			//				"manager1", "category1", "manager1", "Nombre", "Descripción", "http://url.com", null
-			//			},
-			//			//un Manager crea un servicio para otro manager
-			//			{
-			//				"manager1", "category1", "manager2", "Nombre", "Descripción", "http://url.com", IllegalArgumentException.class
-			//			},
-			//			//un Manager crea un servicio con nombre en blanco
-			//			{
-			//				"manager1", "category1", "manager1", "", "Descripción", "http://url.com", ConstraintViolationException.class
-			//			},
-			//			//un Manager crea un servicio con nombre nulo
-			//			{
-			//				"manager1", "category1", "manager1", null, "Descripción", "http://url.com", ConstraintViolationException.class
-			//			},
-			//			//un Manager crea un servicio con descripción en blanco
-			//			{
-			//				"manager1", "category1", "manager1", "Nombre", "", "http://url.com", ConstraintViolationException.class
-			//			},
-			//			//un Manager crea un servicio con descripción nula
-			//			{
-			//				"manager1", "category1", "manager1", "Nombre", null, "http://url.com", ConstraintViolationException.class
-			//			},
+			{
+				"manager1", "category1", "manager1", "Nombre", "Descripción", "http://url.com", null
+
+			},
 			//un Manager crea un servicio con picture en blanco
 			{
 				"manager1", "category1", "manager1", "Nombre", "Descripción", "", null
+			},
+			//			//un Manager crea un servicio con picture nula
+			{
+				"manager1", "category1", "manager1", "Nombre", "Descripción", null, null
+			},
+			//			//un Manager crea un servicio para otro manager
+			{
+				"manager1", "category1", "manager2", "Nombre", "Descripción", "http://url.com", IllegalArgumentException.class
+			},
+			//			//un Manager crea un servicio con nombre en blanco
+			{
+				"manager1", "category1", "manager1", "", "Descripción", "http://url.com", ConstraintViolationException.class
+			},
+			//			//un Manager crea un servicio con nombre nulo
+			{
+				"manager1", "category1", "manager1", null, "Descripción", "http://url.com", ConstraintViolationException.class
+			},
+			//			//un Manager crea un servicio con descripción en blanco
+			{
+				"manager1", "category1", "manager1", "Nombre", "", "http://url.com", ConstraintViolationException.class
+			},
+			//			//un Manager crea un servicio con descripción nula
+			{
+				"manager1", "category1", "manager1", "Nombre", null, "http://url.com", ConstraintViolationException.class
+			},
+			//			//un Manager crea un servicio con picture mal formateada
+			{
+				"manager1", "category1", "manager1", "Nombre", "Descripción", "url.com", ConstraintViolationException.class
 			}
-		//			//un Manager crea un servicio con picture nula
-		//			{
-		//				"manager1", "category1", "manager1", "Nombre", "Descripción", null, ConstraintViolationException.class
-		//			},
-		//			//un Manager crea un servicio con picture mal formateada
-		//			{
-		//				"manager1", "category1", "manager1", "Nombre", "Descripción", "url.com", ConstraintViolationException.class
-		//			}
 
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (Class<?>) testingData[i][6]);
+	}
+
+	@Test
+	public void DeleteDriver() {
+		final Object testingData2[][] = {
+			{
+				"manaer1", "service9", null
+			}, {
+				//Un user no puede borrar
+				"user1", "service9", IllegalArgumentException.class
+			}, {
+				//un manager no puede borrar el servicio de otro manager
+				"manager2", "service9", IllegalArgumentException.class
+			}, {
+				//si tiene request no se puede borrar
+				"manager1", "service1", IllegalArgumentException.class
+
+			}
+		};
 	}
 
 	// Ancillary methods ------------------------------------------------------
@@ -108,6 +129,25 @@ public class ServiceTest extends AbstractTest {
 			service.setPicture(picture);
 			this.serviceService.save(service);
 			this.serviceService.flush();
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	protected void deleteTemplate(final String beanName, final String service, final Class<?> expected) {
+		Class<?> caught;
+		int dbId;
+
+		caught = null;
+		try {
+			dbId = super.getEntityId(service);
+
+			this.authenticate(beanName);
+			this.serviceService.delete(dbId);
 			this.unauthenticate();
 
 		} catch (final Throwable oops) {
