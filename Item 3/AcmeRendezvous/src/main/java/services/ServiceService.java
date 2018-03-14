@@ -120,7 +120,7 @@ public class ServiceService {
 
 		principal = this.managerService.findByPrincipal();
 		Assert.isTrue(principal.getId() == service.getManager().getId());
-		result = this.serviceRepository.saveAndFlush(service);
+		result = this.serviceRepository.save(service);
 		return result;
 	}
 
@@ -178,5 +178,8 @@ public class ServiceService {
 		}
 		this.validator.validate(service, binding);
 		return service;
+	}
+	public void flush() {
+		this.serviceRepository.flush();
 	}
 }
