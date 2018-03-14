@@ -8,7 +8,7 @@
  * http://www.tdg-seville.info/License.html
  */
 
-package sample;
+package services;
 
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
