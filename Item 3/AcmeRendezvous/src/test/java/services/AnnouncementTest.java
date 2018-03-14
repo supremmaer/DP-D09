@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import services.AnnouncementService;
-import services.RendezvousService;
 import utilities.AbstractTest;
 import domain.Announcement;
 import domain.Rendezvous;
@@ -91,11 +89,11 @@ public class AnnouncementTest extends AbstractTest {
 			{	//Un usuario no puede borrar un anuncio
 				"user1", "announcement1", IllegalArgumentException.class
 			}, {
-				//Un admin puede borrar un anuncio
-				"admin", "announcement1", null
-			}, {
 				//Un managerr puede borrar un anuncio
 				"manager1", "announcement1", IllegalArgumentException.class
+			}, {
+				//Un admin puede borrar un anuncio
+				"admin", "announcement1", null
 			}
 		};
 
