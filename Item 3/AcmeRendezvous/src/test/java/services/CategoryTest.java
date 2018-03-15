@@ -57,12 +57,20 @@ public class CategoryTest extends AbstractTest {
 				"admin", "", "descriptionX", ConstraintViolationException.class
 			}, {
 				"admin", "nameX", "", ConstraintViolationException.class
+			}, {
+				"admin", "nameX", "Descripocion", null
 			}
-
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
-			this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (String) testingData1[i][2], (Class<?>) testingData1[i][3]);
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (String) testingData1[i][2], (Class<?>) testingData1[i][3]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 	@Test
 	public void DeleteDriver() {
@@ -77,7 +85,7 @@ public class CategoryTest extends AbstractTest {
 				"user1", "category4", IllegalArgumentException.class
 			}, {
 				//un usuario no puede borrar
-				"admin", "category2", IllegalArgumentException.class
+				"user2", "category2", IllegalArgumentException.class
 			}, {
 				//si tiene hijos no se puede borrar
 				"admin", "category1", IllegalArgumentException.class
@@ -86,7 +94,14 @@ public class CategoryTest extends AbstractTest {
 		};
 
 		for (int i2 = 0; i2 < testingData2.length; i2++)
-			this.deleteTemplate((String) testingData2[i2][0], (String) testingData2[i2][1], (Class<?>) testingData2[i2][2]);
+			try {
+				super.startTransaction();
+				this.deleteTemplate((String) testingData2[i2][0], (String) testingData2[i2][1], (Class<?>) testingData2[i2][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 
 	// Ancillary methods ------------------------------------------------------

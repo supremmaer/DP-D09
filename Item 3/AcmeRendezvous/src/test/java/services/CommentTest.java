@@ -11,6 +11,7 @@
 package services;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,22 +43,31 @@ public class CommentTest extends AbstractTest {
 		final Object testingData1[][] = {
 			{
 				//Un admin no puede crear
-				"admin", "rendezvous1", IllegalArgumentException.class
+				"admin", "rendezvous1","Me gusto tu rendezvous" ,IllegalArgumentException.class
 			},{
 				//Un admin no puede crear
-				"admin", "rendezvous2", IllegalArgumentException.class
+				"admin", "rendezvous2","dislike mal rendezvous", IllegalArgumentException.class
 			}, {
 				//un usuario que no tiene rsvp
-				"user7", "rendezvous2", IllegalArgumentException.class
+				"user7", "rendezvous2","que gran rendezvous", IllegalArgumentException.class
 			}, {
-				"user1", "rendezvous1", null
+				"user1", "rendezvous1","excelente bocadillo comi en este rendezvous", null
 			}, {
-				"user3", "rendezvous1", null
+				"user3", "rendezvous1","el siguiente comentario es nulo", null
+			}, {
+				"user3", "rendezvous1","", ConstraintViolationException.class
 			}
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
-			this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (Class<?>) testingData1[i][2]);
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1],(String) testingData1[i][2], (Class<?>) testingData1[i][3]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 	@Test
 	public void DeleteDriver() {
@@ -80,11 +90,18 @@ public class CommentTest extends AbstractTest {
 		};
 
 		for (int i2 = 0; i2 < testingData2.length; i2++)
-			this.deleteTemplate((String) testingData2[i2][0], (String) testingData2[i2][1], (Class<?>) testingData2[i2][2]);
+			try {
+				super.startTransaction();
+				this.deleteTemplate((String) testingData2[i2][0], (String) testingData2[i2][1], (Class<?>) testingData2[i2][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 
 	// Ancillary methods ------------------------------------------------------
-	protected void createAndSaveTemplate(final String beanName, final String rendezvous, final Class<?> expected) {
+	protected void createAndSaveTemplate(final String beanName, final String rendezvous,final String text, final Class<?> expected) {
 		Class<?> caught;
 		int dbId;
 		
@@ -95,7 +112,9 @@ public class CommentTest extends AbstractTest {
 	
 			authenticate(beanName);
 			Comment comment=commentService.create(rendezvousId, null);
+			comment.setText(text);
 			commentService.save(comment);
+			commentService.flush();
 			unauthenticate();
 		
 		} catch (final Throwable oops) {

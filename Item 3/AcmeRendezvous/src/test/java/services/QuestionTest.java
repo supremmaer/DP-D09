@@ -2,6 +2,7 @@
 package services;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,12 +45,22 @@ public class QuestionTest extends AbstractTest {
 				"manager1", "rendezvous6", "text", IllegalArgumentException.class
 			}, {
 				//este deberia ir bien
-				"user1", "rendezvous6", "text", null
+				"user1", "rendezvous6", "el siguiente va a ser nulo", null
+			}, {
+				//este es nulo
+				"user1", "rendezvous6", "", ConstraintViolationException.class
 			},
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
-			this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (String) testingData1[i][2], (Class<?>) testingData1[i][3]);
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData1[i][0], (String) testingData1[i][1], (String) testingData1[i][2], (Class<?>) testingData1[i][3]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 
 	@Test
@@ -73,7 +84,14 @@ public class QuestionTest extends AbstractTest {
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			try {
+				super.startTransaction();
+				this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
 	}
 
 	// Ancillary methods ------------------------------------------------------
