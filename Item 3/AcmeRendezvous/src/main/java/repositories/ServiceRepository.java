@@ -23,4 +23,10 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
 	@Query("select s.id from Service s where s.manager.id=?1 and s.cancelled=true")
 	Collection<Service> findByManagerAndCancelledTrue(int id);
+
+	@Query("select 1.0*count(s)/(select count(c) from Category c) from Service s")
+	Double avgServicesPerCategory();
+
+	@Query("select r.service from Request r where r.rendezvous.id=?1")
+	Collection<Service> findByRendezvousID(int id);
 }

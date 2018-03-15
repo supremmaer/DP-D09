@@ -1164,7 +1164,7 @@
 		<property name="picture" value="http://url.com" />
 		<property name="cancelled" value="false" />
 		<property name="manager" ref="manager1" />
-		<property name="category" ref="category1" />
+		<property name="category" ref="category2" />
 	</bean>
 	<bean id="service4" class="domain.Service">
 		<property name="name" value="service4 name" />
@@ -1180,7 +1180,7 @@
 		<property name="picture" value="http://url.com" />
 		<property name="cancelled" value="false" />
 		<property name="manager" ref="manager1" />
-		<property name="category" ref="category1" />
+		<property name="category" ref="category3" />
 	</bean>
 	<bean id="service6" class="domain.Service">
 		<property name="name" value="service6 name" />

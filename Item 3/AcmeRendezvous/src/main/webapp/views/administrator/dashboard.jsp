@@ -132,6 +132,39 @@
 </display:table>
 <br/><br/><br/>
 
+<b><spring:message code="administrator.avgCpR"/></b>
+<fmt:formatNumber value="${avgCategoryPerRendezvous}" pattern="####0.00"/>
+<br/><br/><br/>
+
+
+<b><spring:message code="administrator.avgSpC"/></b>
+<fmt:formatNumber value="${avgServicesPerCategory}" pattern="####0.00"/>
+<br/><br/><br/>
+
+<b><spring:message code="administrator.avgSpR"/></b>
+<fmt:formatNumber value="${avgServicePerRendezvous}" pattern="####0.00"/>
+<br/>
+<b><spring:message code="administrator.minSpR"/></b>
+<fmt:formatNumber value="${minServicePerRendezvous}" pattern="####0.00"/>
+<br/>
+<b><spring:message code="administrator.maxSpR"/></b>
+<fmt:formatNumber value="${maxServicePerRendezvous}" pattern="####0.00"/>
+<br/>
+<b><spring:message code="administrator.sdSpR"/></b>
+<fmt:formatNumber value="${sdServicePerRendezvous}" pattern="####0.00"/>
+<br/><br/><br/>
+
+<b><spring:message code="administrator.TMS"/></b>
+<display:table pagesize="5" class="displaytag" keepStatus="true"
+	name="topSellers" requestURI="${requestURI}" id="row">
+	
+	<b><spring:message code="administrator.TMS" var="title"/></b>
+	<display:column title="${title}">
+		<a href="service/display.do?serviceId=${row.id}">${row.name}</a>
+	</display:column>
+</display:table>
+<br/><br/><br/>
+
 
 </security:authorize>
 	

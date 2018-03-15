@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import services.ActorService;
 import services.AnnouncementService;
 import services.AnswerService;
+import services.CategoryService;
 import services.CommentService;
 import services.ManagerService;
 import services.QuestionService;
@@ -71,6 +72,9 @@ public class AdministratorController extends AbstractController {
 
 	@Autowired
 	private ManagerService		managerService;
+
+	@Autowired
+	private CategoryService		categoryService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -140,6 +144,16 @@ public class AdministratorController extends AbstractController {
 
 		Collection<Manager> managersMoreCancelledServices = new ArrayList<Manager>();
 
+		Double avgCategoryPerRendezvous = 0.0;
+		Double avgServicesPerCategory = 0.0;
+
+		Double avgServicePerRendezvous = 0.0;
+		Double minServicePerRendezvous = 0.0;
+		Double maxServicePerRendezvous = 0.0;
+		Double sdServicePerRendezvous = 0.0;
+
+		Collection<Service> topSellers = new ArrayList<Service>();
+
 		if (this.rendezvousService.findAll().size() > 0) {
 
 			avgRendezvousesperUser = this.rendezvousService.averageRendezvousesperUser();
@@ -175,12 +189,22 @@ public class AdministratorController extends AbstractController {
 				avgReplysperComment = this.commentService.averageReplysperComment();
 				sdReplysperComment = this.commentService.standardDeviationReplysperComment();
 			}
-			if (this.serviceService.findAll().size() > 0 && this.requestService.findAll().size() > 0)
+			if (this.serviceService.findAll().size() > 0 && this.requestService.findAll().size() > 0) {
 				mostSellers = this.serviceService.findMostSellers();
+				avgServicePerRendezvous = this.serviceService.getServicesPerRendezvousData().get("average");
+				minServicePerRendezvous = this.serviceService.getServicesPerRendezvousData().get("minimum");
+				maxServicePerRendezvous = this.serviceService.getServicesPerRendezvousData().get("maximum");
+				sdServicePerRendezvous = this.serviceService.getServicesPerRendezvousData().get("standardDeviation");
+				topSellers = this.serviceService.findTopFiveSellingServices();
+			}
 
-			if (this.serviceService.findAll().size() > 0 && this.managerService.findAll().size() > 0)
+			if (this.serviceService.findAll().size() > 0 && this.managerService.findAll().size() > 0) {
 				managersWithMoreServicesThanAVG = this.managerService.managersWithMoreServicesThanAVG();
-			managersMoreCancelledServices = this.managerService.managersMoreCancelledServices();
+				managersMoreCancelledServices = this.managerService.managersMoreCancelledServices();
+				avgServicesPerCategory = this.serviceService.avgServicesPerCategory();
+			}
+
+			avgCategoryPerRendezvous = this.categoryService.avgCategoriesPerRendezvous();
 
 		}
 
@@ -220,6 +244,17 @@ public class AdministratorController extends AbstractController {
 		result.addObject("managersWithMoreServicesThanAVG", managersWithMoreServicesThanAVG);
 
 		result.addObject("managersMoreCancelledServices", managersMoreCancelledServices);
+
+		result.addObject("avgCategoryPerRendezvous", avgCategoryPerRendezvous);
+
+		result.addObject("avgServicesPerCategory", avgServicesPerCategory);
+
+		result.addObject("avgServicePerRendezvous", avgServicePerRendezvous);
+		result.addObject("minServicePerRendezvous", minServicePerRendezvous);
+		result.addObject("maxServicePerRendezvous", maxServicePerRendezvous);
+		result.addObject("sdServicePerRendezvous", sdServicePerRendezvous);
+
+		result.addObject("topSellers", topSellers);
 
 		result.addObject("requestURI", "administrator/dashboard.do");
 		return result;

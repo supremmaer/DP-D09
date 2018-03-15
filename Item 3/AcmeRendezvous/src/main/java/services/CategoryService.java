@@ -17,6 +17,7 @@ import repositories.CategoryRepository;
 import domain.Actor;
 import domain.Administrator;
 import domain.Category;
+import domain.Rendezvous;
 
 @Service
 @Transactional
@@ -33,6 +34,9 @@ public class CategoryService {
 
 	@Autowired
 	private ServiceService		serviceService;
+
+	@Autowired
+	private RendezvousService	rendezvousService;
 
 
 	//Constructors
@@ -167,7 +171,28 @@ public class CategoryService {
 		this.validator.validate(category, binding);
 		return category;
 	}
+
+	public Collection<Category> findByRendezvousID(final int id) {
+		final Collection<Category> result = this.categoryRepository.findByRendezvousID(id);
+		return result;
+	}
+
+	public Double avgCategoriesPerRendezvous() {
+		//TODO: Testear con BD vacia
+		Double result;
+		Double sum = 0.0;
+		Collection<Category> auxc = new ArrayList<Category>();
+		final Collection<Rendezvous> auxr = this.rendezvousService.findAll();
+		for (final Rendezvous r : auxr) {
+			auxc = this.findByRendezvousID(r.getId());
+			sum = sum + auxc.size();
+		}
+		result = sum / auxr.size();
+		return result;
+	}
+
 	public void flush() {
 		this.categoryRepository.flush();
 	}
+
 }

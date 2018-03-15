@@ -3,7 +3,9 @@ package services;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -179,7 +181,55 @@ public class ServiceService {
 		this.validator.validate(service, binding);
 		return service;
 	}
+	public Double avgServicesPerCategory() {
+		final Double result = this.serviceRepository.avgServicesPerCategory();
+		return result;
+	}
+
+	public Collection<domain.Service> findByRendezvousID(final int id) {
+		final Collection<domain.Service> result = this.serviceRepository.findByRendezvousID(id);
+		return result;
+	}
+
+	public Map<String, Double> getServicesPerRendezvousData() {
+		final Map<String, Double> result = new HashMap<>();
+		final Collection<Rendezvous> all = this.rendezvousService.findAll();
+		Collection<domain.Service> aux = new ArrayList<domain.Service>();
+		Double auxavg = 0.0;
+		Double avg;
+		Double min = Double.MAX_VALUE;
+		Double max = Double.MIN_VALUE;
+		Double auxsd = 0.0;
+		Double sd;
+		for (final Rendezvous r : all) {
+			aux = this.findByRendezvousID(r.getId());
+			auxavg = auxavg + aux.size();
+			min = Math.min(min, aux.size());
+			max = Math.max(max, aux.size());
+			auxsd = auxsd + (aux.size() * aux.size());
+		}
+		avg = auxavg / all.size();
+		sd = Math.sqrt((auxsd / all.size()) - (avg * avg));
+
+		result.put("average", avg);
+		result.put("minimum", min);
+		result.put("maximum", max);
+		result.put("standardDeviation", sd);
+		return result;
+	}
+	public Collection<domain.Service> findTopFiveSellingServices() {
+		final List<domain.Service> aux = new ArrayList<domain.Service>(this.findMostSellersOrder());
+		final Collection<domain.Service> result = new ArrayList<domain.Service>();
+		for (int i = 0; i < aux.size(); i++)
+			if (result.size() == 5)
+				break;
+			else if (this.requestService.findByServiceID(aux.get(i).getId()).size() > 0)
+				result.add(aux.get(i));
+		return result;
+	}
+
 	public void flush() {
 		this.serviceRepository.flush();
 	}
+
 }

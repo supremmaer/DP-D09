@@ -17,4 +17,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
 	@Query("select c from Category c where c.parent.id=?1")
 	Collection<Category> findChilds(int categoryId);
+
+	@Query("select s.category from Request r join r.service s where r.rendezvous.id=?1")
+	Collection<Category> findByRendezvousID(int id);
 }
