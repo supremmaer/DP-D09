@@ -69,6 +69,25 @@ public class RendezvousTest extends AbstractTest {
 				super.rollbackTransaction();
 			}
 	}
+
+	@Test
+	public void deleteDriver() {
+		final Object testingData[][] = {
+			{	//Un usuario no puede borrar un rendezvous que no es suyo
+				"user2", "rendezvous1", IllegalArgumentException.class
+			}, {
+				//Un manager no puede borrar un rendezvous
+				"manager1", "rendezvous1", IllegalArgumentException.class
+			}, {
+				//Un usuario puede borrar un rendezvous suyo
+				"user1", "rendezvous1", null
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
 	// Ancillary methods ------------------------------------------------------
 	protected void createAndSaveTemplate(final String userName, final String name, final String description, final Date moment, final String picture, final Class<?> expected) {
 		Class<?> caught;
@@ -84,6 +103,24 @@ public class RendezvousTest extends AbstractTest {
 			rendezvous.setMoment(this.fechaValida);
 			this.rendezvousService.save(rendezvous);
 			this.rendezvousService.flush();
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	protected void deleteTemplate(final String userName, final String rendezvousBeanName, final Class<?> expected) {
+		Class<?> caught;
+		int rendezvousId;
+
+		caught = null;
+		try {
+			this.authenticate(userName);
+			rendezvousId = super.getEntityId(rendezvousBeanName);
+			this.rendezvousService.delete(rendezvousId);
 			this.unauthenticate();
 
 		} catch (final Throwable oops) {

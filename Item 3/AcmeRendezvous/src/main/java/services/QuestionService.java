@@ -100,7 +100,6 @@ public class QuestionService {
 		final Collection<Answer> answers = this.answerService.findByQuestionId(question.getId());
 		for (final Answer a : answers)
 			this.answerService.delete(a);
-		Assert.isTrue(question.getRendezvous().isFinalVersion() == false);
 		this.questionRepository.delete(question);
 
 	}
