@@ -83,5 +83,7 @@ public class ConfigService {
 		result = this.configRepository.findAll().get(0);
 		return result;
 	}
-
+	public void flush() {
+		this.configRepository.flush();
+	}
 }

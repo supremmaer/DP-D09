@@ -92,9 +92,9 @@ public class ServiceTest extends AbstractTest {
 
 	@Test
 	public void DeleteDriver() {
-		final Object testingData2[][] = {
+		final Object testingData[][] = {
 			{
-				"manaer1", "service9", null
+				"manager1", "service9", null
 			}, {
 				//Un user no puede borrar
 				"user1", "service9", IllegalArgumentException.class
@@ -107,6 +107,10 @@ public class ServiceTest extends AbstractTest {
 
 			}
 		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+
 	}
 
 	// Ancillary methods ------------------------------------------------------
