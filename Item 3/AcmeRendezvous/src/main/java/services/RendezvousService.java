@@ -62,9 +62,12 @@ public class RendezvousService {
 	public Rendezvous create() {
 		Rendezvous result;
 		User user;
+		Actor actor;
 
-		user = (User) this.actorService.findByPrincipal();
+		actor = this.actorService.findByPrincipal();
 		result = new Rendezvous();
+		Assert.isTrue(actor instanceof User);
+		user = (User) actor;
 		result.setUser(user);
 		result.setQuestions(new HashSet<Question>());
 		result.setAnnouncements(new HashSet<Announcement>());
@@ -321,5 +324,9 @@ public class RendezvousService {
 		Assert.notNull(result);
 
 		return result;
+	}
+
+	public void flush() {
+		this.rendezvousRepository.flush();
 	}
 }

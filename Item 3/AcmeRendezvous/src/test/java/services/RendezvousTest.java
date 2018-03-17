@@ -1,0 +1,96 @@
+
+package services;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import utilities.AbstractTest;
+import domain.Rendezvous;
+
+@ContextConfiguration(locations = {
+	"classpath:spring/junit.xml"
+})
+@RunWith(SpringJUnit4ClassRunner.class)
+@Transactional
+public class RendezvousTest extends AbstractTest {
+
+	// System under test ------------------------------------------------------
+	@Autowired
+	private RendezvousService	rendezvousService;
+
+	Calendar					calendario	= new GregorianCalendar(2020, 12, 14);
+	Date						fechaValida	= this.calendario.getTime();
+
+
+	// Tests ------------------------------------------------------------------
+
+	@Test
+	public void createAndSaveDriver() {
+		final Object testingData[][] = {
+			{	//Creacion correcta de un rendezvous
+				"user1", "RendezvousPrueba", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", null
+			}, {
+				//Titulo Vacio
+				"user1", "", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", ConstraintViolationException.class
+			}, {
+				//Descripcion Vacia
+				"user1", "NoTengoDescripcion", "", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", ConstraintViolationException.class
+			},
+			//			{
+			//				//Fecha Vacia
+			//				"user1", "No tengo Fecha", "Mi fecha no Existe", null, "http://www.imagen.com.mx/assets/img/imagen_share.png", ConstraintViolationException.class
+			//			},
+			{	//Imagen No Valida
+				"user1", "No Tengo Imagen", "No me han Puesto Imagen", this.fechaValida, "nosoyunaimagen", ConstraintViolationException.class
+			}, { //Un manager no puede crear un rendezvous
+				"manager1", "RendezvousPrueba2", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
+			}, { //Un admin no puede crear un rendezvous
+				"admin", "RendezvousPrueba2", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			try {
+				super.startTransaction();
+				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (Date) testingData[i][3], (String) testingData[i][4], (Class<?>) testingData[i][5]);
+			} catch (final Throwable oops) {
+				throw new RuntimeException(oops);
+			} finally {
+				super.rollbackTransaction();
+			}
+	}
+	// Ancillary methods ------------------------------------------------------
+	protected void createAndSaveTemplate(final String userName, final String name, final String description, final Date moment, final String picture, final Class<?> expected) {
+		Class<?> caught;
+		Rendezvous rendezvous;
+
+		caught = null;
+		try {
+			this.authenticate(userName);
+			rendezvous = this.rendezvousService.create();
+			rendezvous.setName(name);
+			rendezvous.setDescription(description);
+			rendezvous.setPicture(picture);
+			rendezvous.setMoment(this.fechaValida);
+			this.rendezvousService.save(rendezvous);
+			this.rendezvousService.flush();
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+}
