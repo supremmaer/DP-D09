@@ -24,6 +24,7 @@ import domain.GPSCoordinates;
 import domain.Question;
 import domain.RSVP;
 import domain.Rendezvous;
+import domain.Request;
 import domain.User;
 import forms.SimilarForm;
 
@@ -50,6 +51,8 @@ public class RendezvousService {
 	private QuestionService			questionService;
 	@Autowired
 	private GPSCoordinatesService	gpscoordinatesService;
+	@Autowired
+	private RequestService			requestService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -107,6 +110,7 @@ public class RendezvousService {
 		final Collection<RSVP> RSVPs = this.RSVPService.findbyRendezvous(rendezvous.getId());
 		final Collection<Comment> comments = this.commentService.findByRendezvousIdRoot(rendezvous.getId());
 		final Collection<Question> questions = rendezvous.getQuestions();
+		final Collection<Request> requests	= requestService.findByRendezvousID(rendezvous.getId());
 		actor = this.actorService.findByPrincipal();
 		for (final Announcement a : announcements)
 			this.announcementService.delete(a.getId());
@@ -118,6 +122,8 @@ public class RendezvousService {
 			this.commentService.delete(c);
 		for (final Question q : questions)
 			this.questionService.delete(q);
+		for(final Request r: requests)
+			this.requestService.delete(r);
 
 		Assert.notNull(rendezvous);
 		Assert.isTrue(rendezvous.getId() != 0);

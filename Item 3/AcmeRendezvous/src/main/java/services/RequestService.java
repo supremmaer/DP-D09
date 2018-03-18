@@ -83,6 +83,10 @@ public class RequestService {
 		final Collection<Request> result = this.requestRepository.findByServiceID(id);
 		return result;
 	}
+	public Collection<Request> findByRendezvousID(int id){
+		return requestRepository.findByRendezvousID(id);
+				
+	}
 
 	public Request save(final RequestForm requestForm) {
 		final User user;
