@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import services.CategoryService;
+import services.ServiceService;
 import controllers.AbstractController;
 import domain.Category;
+import domain.Service;
 
 @Controller
 @RequestMapping("/category/administrator")
@@ -33,6 +35,9 @@ public class CategoryAdministratorController extends AbstractController {
 
 	@Autowired
 	private CategoryService	categoryService;
+
+	@Autowired
+	private ServiceService	serviceService;
 
 
 	// Constructors -----------------------------------------------------------
@@ -128,12 +133,20 @@ public class CategoryAdministratorController extends AbstractController {
 	protected ModelAndView createEditModelAndView(final Category category, final String messageCode) {
 		ModelAndView result;
 		Collection<Category> categories;
+		Collection<Service> services;
+		boolean deleteable;
 
+		deleteable = false;
+		if (category.getId() != 0) {
+			services = this.serviceService.findByCategoryId(category.getId());
+			deleteable = services.isEmpty();
+		}
 		categories = this.categoryService.findParentable(category);
 		result = new ModelAndView("category/edit");
 		result.addObject("category", category);
 		result.addObject("message", messageCode);
 		result.addObject("categories", categories);
+		result.addObject("deleteable", deleteable);
 
 		return result;
 	}

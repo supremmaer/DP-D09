@@ -40,7 +40,7 @@
 		
 	<acme:submit name="save" code="category.save"/>
 	
-	<jstl:if test="${category.categories[0]==null}">
+	<jstl:if test="${category.categories[0]==null && deleteable}">
 		<acme:submit name="delete" code="category.delete"/>
 	</jstl:if>
 	
