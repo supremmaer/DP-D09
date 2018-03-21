@@ -107,6 +107,7 @@ public class RendezvousService {
 		Actor actor;
 
 		final Collection<Announcement> announcements = rendezvous.getAnnouncements();
+		final Collection<Rendezvous> allRendezvous = this.findAll();
 		final Collection<RSVP> RSVPs = this.RSVPService.findbyRendezvous(rendezvous.getId());
 		final Collection<Comment> comments = this.commentService.findByRendezvousIdRoot(rendezvous.getId());
 		final Collection<Question> questions = rendezvous.getQuestions();
@@ -124,6 +125,17 @@ public class RendezvousService {
 			this.questionService.delete(q);
 		for(final Request r: requests)
 			this.requestService.delete(r);
+//		eliminar rendezvouses similares
+		for(Rendezvous r:allRendezvous){
+			if(r.getRendezvouses().contains(rendezvous)){
+				Collection<Rendezvous> aux = r.getRendezvouses();
+				aux.remove(rendezvous);
+				r.setRendezvouses(aux);
+				rendezvousRepository.save(r);
+			}
+		}
+			
+		
 
 		Assert.notNull(rendezvous);
 		Assert.isTrue(rendezvous.getId() != 0);
