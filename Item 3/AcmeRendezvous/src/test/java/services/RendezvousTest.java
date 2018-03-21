@@ -73,14 +73,35 @@ public class RendezvousTest extends AbstractTest {
 	@Test
 	public void deleteDriver() {
 		final Object testingData[][] = {
-			{	//Un usuario no puede borrar un rendezvous que no es suyo
+			{	//Un usuario no puede poner en deleted un rendezvous que no es suyo
 				"user2", "rendezvous1", IllegalArgumentException.class
 			}, {
-				//Un manager no puede borrar un rendezvous
+				//Un manager no puede poner en deleted un rendezvous
 				"manager1", "rendezvous1", IllegalArgumentException.class
 			}, {
-				//Un usuario puede borrar un rendezvous suyo
+				//Un usuario puede poner en deleted un rendezvous suyo
 				"user1", "rendezvous1", null
+			}, {
+				//Un Admin no puede poner en deleted un rendezvous, sino que lo borra con remove
+				"admin", "rendezvous2", IllegalArgumentException.class
+			}
+		};
+
+		for (int i = 0; i < testingData.length; i++)
+			this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+	}
+
+	@Test
+	public void removeDriver() {
+		final Object testingData[][] = {
+			{	//Un manager no puede borrar un rendezvous
+				"manager1", "rendezvous1", IllegalArgumentException.class
+			}, {
+				//Un usuario no puede borrar un rendezvous suyo, solo podria ponerlo en deleted, que es el metodo de antes
+				"user1", "rendezvous1", null
+			}, {
+				//Un Admin puede borrar un rendezvous
+				"admin", "rendezvous3", IllegalArgumentException.class
 			}
 		};
 
@@ -121,6 +142,26 @@ public class RendezvousTest extends AbstractTest {
 			this.authenticate(userName);
 			rendezvousId = super.getEntityId(rendezvousBeanName);
 			this.rendezvousService.delete(rendezvousId);
+			this.unauthenticate();
+
+		} catch (final Throwable oops) {
+			caught = oops.getClass();
+		}
+
+		this.checkExceptions(expected, caught);
+	}
+
+	protected void removeTemplate(final String userName, final String rendezvousBeanName, final Class<?> expected) {
+		Class<?> caught;
+		int rendezvousId;
+		Rendezvous rendezvous;
+
+		caught = null;
+		try {
+			this.authenticate(userName);
+			rendezvousId = super.getEntityId(rendezvousBeanName);
+			rendezvous = this.rendezvousService.findOne(rendezvousId);
+			this.rendezvousService.remove(rendezvous);
 			this.unauthenticate();
 
 		} catch (final Throwable oops) {
