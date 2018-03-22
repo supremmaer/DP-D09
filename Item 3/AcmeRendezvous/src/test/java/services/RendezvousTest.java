@@ -31,6 +31,9 @@ public class RendezvousTest extends AbstractTest {
 	Calendar					calendario	= new GregorianCalendar(2020, 12, 14);
 	Date						fechaValida	= this.calendario.getTime();
 
+	Calendar					calendario2	= new GregorianCalendar(1996, 12, 14);
+	Date						fechaPasada	= this.calendario2.getTime();
+
 
 	// Tests ------------------------------------------------------------------
 
@@ -45,17 +48,21 @@ public class RendezvousTest extends AbstractTest {
 			}, {
 				//Descripcion Vacia
 				"user1", "NoTengoDescripcion", "", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", ConstraintViolationException.class
-			},
-			//			{
-			//				//Fecha Vacia
-			//				"user1", "No tengo Fecha", "Mi fecha no Existe", null, "http://www.imagen.com.mx/assets/img/imagen_share.png", ConstraintViolationException.class
-			//			},
-			{	//Imagen No Valida
+			}, {	//Imagen No Valida
 				"user1", "No Tengo Imagen", "No me han Puesto Imagen", this.fechaValida, "nosoyunaimagen", ConstraintViolationException.class
-			}, { //Un manager no puede crear un rendezvous
+			}, { //Un 0manager no puede crear un rendezvous
 				"manager1", "RendezvousPrueba2", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
 			}, { //Un admin no puede crear un rendezvous
 				"admin", "RendezvousPrueba2", "description", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
+			}, {
+				//Fecha Vacia
+				"user1", "No tengo Fecha", "Mi fecha no Existe", null, "http://www.imagen.com.mx/assets/img/imagen_share.png", NullPointerException.class
+			}, {
+				//Fecha en el Pasado
+				"user1", "Mi fecha ha pasado", "Mi fecha es en 1996", this.fechaPasada, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
+			}, {
+				//Usuario no logueado no puede crear rendezvous
+				"null", "No estoy logueado", "Este es tonto", this.fechaValida, "http://www.imagen.com.mx/assets/img/imagen_share.png", IllegalArgumentException.class
 			}
 		};
 
@@ -84,6 +91,9 @@ public class RendezvousTest extends AbstractTest {
 			}, {
 				//Un Admin no puede poner en deleted un rendezvous, sino que lo borra con remove
 				"admin", "rendezvous2", IllegalArgumentException.class
+			}, {
+				//Un usuario no logueado no puede poner en deleted un rendezvous
+				"null", "rendezvous2", IllegalArgumentException.class
 			}
 		};
 
@@ -98,15 +108,18 @@ public class RendezvousTest extends AbstractTest {
 				"manager1", "rendezvous1", IllegalArgumentException.class
 			}, {
 				//Un usuario no puede borrar un rendezvous suyo, solo podria ponerlo en deleted, que es el metodo de antes
-				"user1", "rendezvous1", null
+				"user1", "rendezvous1", IllegalArgumentException.class
+			}, {
+				//Un usuario no logueado no puede borrar un rendezvous
+				"null", "rendezvous1", IllegalArgumentException.class
 			}, {
 				//Un Admin puede borrar un rendezvous
-				"admin", "rendezvous3", IllegalArgumentException.class
+				"admin", "rendezvous7", null
 			}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
-			this.deleteTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
+			this.removeTemplate((String) testingData[i][0], (String) testingData[i][1], (Class<?>) testingData[i][2]);
 	}
 
 	// Ancillary methods ------------------------------------------------------
@@ -121,7 +134,7 @@ public class RendezvousTest extends AbstractTest {
 			rendezvous.setName(name);
 			rendezvous.setDescription(description);
 			rendezvous.setPicture(picture);
-			rendezvous.setMoment(this.fechaValida);
+			rendezvous.setMoment(moment);
 			this.rendezvousService.save(rendezvous);
 			this.rendezvousService.flush();
 			this.unauthenticate();
