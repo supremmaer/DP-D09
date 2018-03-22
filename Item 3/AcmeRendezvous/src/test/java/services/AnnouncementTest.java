@@ -94,7 +94,7 @@ public class AnnouncementTest extends AbstractTest {
 	}
 
 	@Test
-	public void delelteDriver() {
+	public void deleteDriver() {
 		final Object testingData[][] = {
 			{	//Un usuario no puede borrar un anuncio
 				"user1", "announcement1", IllegalArgumentException.class
