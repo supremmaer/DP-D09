@@ -576,43 +576,43 @@
 		<property name="question" ref="question6" />
 	</bean>
 
-	<!-- Annoucement -->
-	<bean id="annoucement1" class="domain.Announcement">
+	<!-- announcement -->	
+	<bean id="announcement1" class="domain.Announcement">
 		<property name="title" value="title1" />
 		<property name="description" value="description1" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement2" class="domain.Announcement">
+	<bean id="announcement2" class="domain.Announcement">
 		<property name="title" value="title2" />
 		<property name="description" value="description2" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement3" class="domain.Announcement">
+	<bean id="announcement3" class="domain.Announcement">
 		<property name="title" value="title3" />
 		<property name="description" value="description3" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement4" class="domain.Announcement">
+	<bean id="announcement4" class="domain.Announcement">
 		<property name="title" value="title4" />
 		<property name="description" value="description4" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement5" class="domain.Announcement">
+	<bean id="announcement5" class="domain.Announcement">
 		<property name="title" value="title5" />
 		<property name="description" value="description5" />
 		<property name="moment" value="01/05/2014" />
 		<property name="rendezvous" ref="rendezvous1" />
 	</bean>
 	
-	<bean id="annoucement6" class="domain.Announcement">
+	<bean id="announcement6" class="domain.Announcement">
 		<property name="title" value="title6" />
 		<property name="description" value="description6" />
 		<property name="moment" value="01/05/2014" />
@@ -787,12 +787,12 @@
 		<property name="deleted" value="false" />
 		<property name="announcements">
 			<list>
-				<ref bean="annoucement1" />
-				<ref bean="annoucement2" />
-				<ref bean="annoucement3" />
-				<ref bean="annoucement4" />
-				<ref bean="annoucement5" />
-				<ref bean="annoucement6" />
+				<ref bean="announcement1" />
+				<ref bean="announcement2" />
+				<ref bean="announcement3" />
+				<ref bean="announcement4" />
+				<ref bean="announcement5" />
+				<ref bean="announcement6" />
 			</list>
 		</property>
 		<property name="rendezvouses">

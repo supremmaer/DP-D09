@@ -36,7 +36,8 @@ public class ActorService {
 	private UserService				userService;
 
 	@Autowired
-	private ManagerService 			managerService;
+	private ManagerService			managerService;
+
 
 	//Constructor ----------------------------------------------------
 
@@ -87,8 +88,7 @@ public class ActorService {
 		result.setBirthDate(actorForm.getBirthDate());
 		result.getUserAccount().setUsername(actorForm.getUsername());
 		result.getUserAccount().setPassword(actorForm.getPassword());
-	
-		
+
 		return result;
 	}
 
@@ -160,6 +160,12 @@ public class ActorService {
 		if (principal instanceof UserAccount)
 			result = true;
 		return result;
+	}
+
+	public void flush() {
+		// TODO Auto-generated method stub
+		this.actorRepository.flush();
+
 	}
 
 	//Other business methods ----------------------------------------------------
