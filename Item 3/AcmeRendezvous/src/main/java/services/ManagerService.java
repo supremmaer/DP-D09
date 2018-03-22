@@ -98,6 +98,10 @@ public class ManagerService {
 	public boolean PatronOk(final String string) {
 		boolean isok = true;
 		boolean anteriorFueGuion = false;
+		if(string.length()<4){
+			isok = false;
+		return isok;
+		}
 		for (int i = 0; i <= string.length() - 1; i++) {
 			
 			final char a = string.charAt(i);
