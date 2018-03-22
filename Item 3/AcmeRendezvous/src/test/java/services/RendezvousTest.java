@@ -127,13 +127,17 @@ public class RendezvousTest extends AbstractTest {
 	@Test
 	public void testFindAllFinal() {
 		Collection<Rendezvous> rendezvouses;
-		Rendezvous rendezvous;
-		int rendezvousId;
+		Rendezvous rendezvous, rendezvousNoFinal;
+		int rendezvousId, rendezvousIdNoFinal;
 
 		rendezvouses = this.rendezvousService.findAllFinal();
 		rendezvousId = super.getEntityId("rendezvous1");
+		rendezvousIdNoFinal = super.getEntityId("rendezvous2");
 		rendezvous = this.rendezvousService.findOne(rendezvousId);
+		rendezvousNoFinal = this.rendezvousService.findOne(rendezvousIdNoFinal);
 		Assert.isTrue(rendezvouses.contains(rendezvous));
+		Assert.isTrue(!rendezvouses.contains(rendezvousNoFinal));
+		Assert.isTrue(rendezvouses.size() == 3);
 
 	}
 
