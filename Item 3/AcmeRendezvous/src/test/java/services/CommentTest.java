@@ -53,10 +53,9 @@ public class CommentTest extends AbstractTest {
 			}, {
 				"user1", "rendezvous1","excelente bocadillo comi en este rendezvous", null
 			}, {
-				"user3", "rendezvous1","el siguiente comentario es nulo", null
+				"user2", "rendezvous7","el siguiente comentario es nulo", null
 			}, {
-				"user3", "rendezvous1","", ConstraintViolationException.class
-			}
+				"user2", "rendezvous7","", ConstraintViolationException.class			}
 		};
 
 		for (int i = 0; i < testingData1.length; i++)
