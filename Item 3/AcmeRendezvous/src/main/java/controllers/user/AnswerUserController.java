@@ -74,14 +74,16 @@ public class AnswerUserController extends AbstractController {
 	public ModelAndView edit(@Valid final Answer answer, final BindingResult binding, @RequestParam final int rsvpId) {
 		ModelAndView result;
 
-		if (binding.hasErrors())
+		if (binding.hasErrors()) {
 			result = this.createEditModelAndView(answer);
-		else
+			result.addObject("rsvpId", rsvpId);
+		} else
 			try {
 				this.answerService.save(answer, rsvpId);
 				result = new ModelAndView("redirect:/answer/user/create.do?rsvpId=" + rsvpId);
 			} catch (final Throwable oops) {
 				result = this.createEditModelAndView(answer, "answer.commit.error");
+				result.addObject("rsvpId", rsvpId);
 			}
 
 		return result;
