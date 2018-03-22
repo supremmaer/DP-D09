@@ -51,6 +51,8 @@ public class GPSCoordinatesService {
 		Assert.isTrue(actor instanceof User);
 		Assert.isTrue(!rendezvous.isFinalVersion());
 		Assert.isTrue(actor.getId() == rendezvous.getUser().getId());
+		Assert.notNull(gpsCoordinates.getLatitude());
+		Assert.notNull(gpsCoordinates.getLongitude());
 
 		result = this.gpsCoordinatesRepository.save(gpsCoordinates);
 
@@ -78,5 +80,9 @@ public class GPSCoordinatesService {
 		result = this.gpsCoordinatesRepository.findOne(gpsCoordinatesId);
 
 		return result;
+	}
+
+	public void flush() {
+		this.gpsCoordinatesRepository.flush();
 	}
 }
