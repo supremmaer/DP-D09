@@ -13,6 +13,7 @@ package services;
 import java.util.Date;
 
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,8 +47,32 @@ public class ActorTest extends AbstractTest {
 		final Object testingData[][] = {
 			{	//Creacion correcta de un usuario
 				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, null
-			}, {	//Anuncio para un rendezvous en modo final
-				"", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, "123-123", null
+			}, {	//Creacion correcta de un usuario sin direccion
+				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", null, "USER", true, this.date, null, null
+			}, {	//Creacion correcta de un usuario sin telefono
+				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", null, "Address", "USER", true, this.date, null, null
+			}, {	//useraccount con nombre vacio
+				"", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con nombre vacio
+				"userAccountTest", "password", "password", "", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con nombre nulo
+				"userAccountTest", "password", "password", null, "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con apellido vacio
+				"userAccountTest", "password", "password", "Name", "", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con apellido nulo
+				"userAccountTest", "password", "password", "Name", null, "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con correo vacio
+				"userAccountTest", "password", "password", "Name", "Surname", "", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con correo nulo
+				"userAccountTest", "password", "password", "Name", "Surname", null, "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//user con correo incorrecto
+				"userAccountTest", "password", "password", "Name", "Surname", "jdkshf", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
+			}, {	//Creacion correcta de un manager
+				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "MANAGER", true, this.date, "123-123", null
+			}, {	//Creacion correcta de un manager sin direccion
+				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", null, "MANAGER", true, this.date, "123-123", null
+			}, {	//Creacion correcta de un manager sin telefono
+				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", null, "Address", "MANAGER", true, this.date, "123-123", null
 			}
 		};
 
