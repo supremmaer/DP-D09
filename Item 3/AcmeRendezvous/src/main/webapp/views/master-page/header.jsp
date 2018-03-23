@@ -58,6 +58,8 @@
 					access="hasRole('MANAGER')">
 					<ul>
 						<li class="arrow"></li>
+						<li><a href="service/user/list.do"><spring:message
+									code="master.page.user.service.list" /></a></li>
 						<li><a href="service/manager/list.do"><spring:message
 									code="master.page.manager.service.list" /></a></li>
 						<li><a href="service/manager/create.do"><spring:message
