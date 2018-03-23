@@ -81,9 +81,18 @@ public class RendezvousService {
 
 	public Collection<Rendezvous> findAll() {
 		Collection<Rendezvous> result;
+		User user;
 
 		result = this.rendezvousRepository.findAll();
 		Assert.notNull(result);
+		user = this.userService.findByPrincipal();
+		if (user != null && !user.isAdult()) {
+			final Collection<Rendezvous> aux = new HashSet<>();
+			for (final Rendezvous r : result)
+				if (r.isAdultOnly())
+					aux.add(r);
+			result.removeAll(aux);
+		}
 
 		return result;
 	}

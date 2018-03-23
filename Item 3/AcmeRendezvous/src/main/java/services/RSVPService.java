@@ -47,6 +47,8 @@ public class RSVPService {
 		rendezvous = this.rendezvousService.findOne(rendezvousId);
 		user = (User) this.actorService.findByPrincipal();
 		Assert.isTrue(rendezvous.getUser().getId() != user.getId());
+		if (rendezvous.isAdultOnly())
+			Assert.isTrue(user.isAdult());
 		rsvp = this.rsvpRepository.existByRendezvousIdUserId(rendezvousId, user.getId());
 		Assert.isTrue(rsvp == null || rsvp.isCancelled());
 		if (rsvp == null) {
