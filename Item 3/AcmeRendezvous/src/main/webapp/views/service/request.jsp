@@ -46,10 +46,6 @@
 	<br />
 	<acme:submit name="save" code="service.save"/>
 	
-	<jstl:if test="${request.id!=0}">
-		<acme:submit name="delete" code="service.delete"/>
-	</jstl:if>
-	
 	<acme:cancel url="service/user/list.do" code="service.cancel"/>
 
 </form:form>
