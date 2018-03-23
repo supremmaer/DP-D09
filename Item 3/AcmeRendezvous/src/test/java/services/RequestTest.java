@@ -55,11 +55,7 @@ public class RequestTest extends AbstractTest {
 			}, {	//Creacion correcta de un request con comentario blanco
 				"user1", "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
 			}, {	//Request sin user logueado
-				null, "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
-			}, {	//Request sin servicio
-				"user1", null, "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
-			}, {	//Request sin Rendezvous
-				"user1", "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
+				null, "service2", "rendezvous3", "one commnent", "holder", "brand", "4539433728995809", 10, 20, 150, IllegalArgumentException.class
 			}, {	//Request con holdername vacio
 				"user1", "service2", "rendezvous3", "one comment", "", "brand", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
 			}, {	//Request con holdername nulo
@@ -69,20 +65,6 @@ public class RequestTest extends AbstractTest {
 			}, {	//Request con brandname nulo
 				"user1", "service2", "rendezvous3", "one comment", "holder", null, "4539433728995809", 10, 20, 150, ConstraintViolationException.class
 			}
-		//, {	//Request con creditnumber vacio
-		//	"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "", 10, 20, 150, IllegalArgumentException.class
-		//}
-		//	, {	//Request con creditnumber nulo
-		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", null, 10, 20, 150, IllegalArgumentException.class
-		//	}
-		//	, {	//Request con ExpirationYear nulo
-		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", null, 20, 150, java.lang.NullPointerException.class
-		//	}
-		//, {	//Request con ExpirationMonth nulo
-		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, null, 150, ConstraintViolationException.class
-		//	}, {	//Request con CVV nulo
-		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, 20, null, ConstraintViolationException.class
-		//}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
