@@ -2,7 +2,6 @@
 package domain;
 
 import java.util.Collection;
-import java.util.Date;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -10,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import org.joda.time.LocalDate;
+import org.joda.time.Years;
 
 @Entity
 @Access(AccessType.PROPERTY)
@@ -31,10 +33,11 @@ public class User extends Actor {
 
 	@Transient
 	public boolean isAdult() {
-		final long ageInMs = new Date().getTime() - this.getBirthDate().getTime();
-		final Date age = new Date(ageInMs);
+		final LocalDate birth = new LocalDate(this.getBirthDate());
+		final LocalDate now = new LocalDate();
+		final Years age = Years.yearsBetween(birth, now);
 
-		return (age.getYear() >= 18);
+		return (age.getYears() >= 18);
 	}
 
 }
