@@ -318,9 +318,18 @@ public class RendezvousService {
 
 	public Collection<Rendezvous> findAllFinal() {
 		Collection<Rendezvous> result;
+		User user;
 
 		result = this.rendezvousRepository.findAllFinal();
 		Assert.notNull(result);
+		user = this.userService.findByPrincipal();
+		if (user != null && !user.isAdult()) {
+			final Collection<Rendezvous> aux = new HashSet<>();
+			for (final Rendezvous r : result)
+				if (r.isAdultOnly())
+					aux.add(r);
+			result.removeAll(aux);
+		}
 
 		return result;
 	}
@@ -335,17 +344,35 @@ public class RendezvousService {
 	}
 	public Collection<Rendezvous> findByCategoryId(final int categoryId) {
 		Collection<Rendezvous> result;
+		User user;
 
 		result = this.rendezvousRepository.findByCategoryId(categoryId);
 		Assert.notNull(result);
+		user = this.userService.findByPrincipal();
+		if (user != null && !user.isAdult()) {
+			final Collection<Rendezvous> aux = new HashSet<>();
+			for (final Rendezvous r : result)
+				if (r.isAdultOnly())
+					aux.add(r);
+			result.removeAll(aux);
+		}
 
 		return result;
 	}
 	public Collection<Rendezvous> findByCategoryName(final String categoryName) {
 		Collection<Rendezvous> result;
+		User user;
 
 		result = this.rendezvousRepository.findByCategoryName(categoryName);
 		Assert.notNull(result);
+		user = this.userService.findByPrincipal();
+		if (user != null && !user.isAdult()) {
+			final Collection<Rendezvous> aux = new HashSet<>();
+			for (final Rendezvous r : result)
+				if (r.isAdultOnly())
+					aux.add(r);
+			result.removeAll(aux);
+		}
 
 		return result;
 	}
