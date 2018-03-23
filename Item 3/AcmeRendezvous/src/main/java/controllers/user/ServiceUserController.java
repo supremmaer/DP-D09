@@ -84,7 +84,7 @@ public class ServiceUserController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public ModelAndView request(@RequestParam final Integer serviceId, @CookieValue(value = "creditCard", required = false) final String creditCardId) {
+	public ModelAndView request(@RequestParam final Integer serviceId, @CookieValue(value = "creditCard", required = false) final String creditCardId, final HttpServletResponse response) {
 		Service service;
 		RequestForm requestForm;
 		ModelAndView result;
@@ -93,17 +93,21 @@ public class ServiceUserController extends AbstractController {
 		service = this.serviceService.findOne(serviceId);
 		requestForm = this.requestService.createForm(service);
 
-		if (creditCardId != null) {
-			creditCard = this.creditCardService.findOne(Integer.valueOf(creditCardId));
-			if (creditCard != null) {
-				requestForm.setHolderName(creditCard.getHolderName());
-				requestForm.setBrandName(creditCard.getBrandName());
-				requestForm.setNumber(creditCard.getNumber());
-				requestForm.setExpirationMonth(creditCard.getExpirationMonth());
-				requestForm.setExpirationYear(creditCard.getExpirationYear());
-				requestForm.setCVV(creditCard.getCVV());
+		if (creditCardId != null)
+			try {
+				creditCard = this.creditCardService.findOne(Integer.valueOf(creditCardId));
+				if (creditCard != null) {
+					requestForm.setHolderName(creditCard.getHolderName());
+					requestForm.setBrandName(creditCard.getBrandName());
+					requestForm.setNumber(creditCard.getNumber());
+					requestForm.setExpirationMonth(creditCard.getExpirationMonth());
+					requestForm.setExpirationYear(creditCard.getExpirationYear());
+					requestForm.setCVV(creditCard.getCVV());
+				}
+			} catch (final Throwable oops) {
+				final Cookie cookie = new Cookie("creditCard", null);
+				response.addCookie(cookie);
 			}
-		}
 
 		result = this.createEditModelAndView(requestForm);
 		return result;
