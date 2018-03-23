@@ -83,9 +83,9 @@ public class RequestService {
 		final Collection<Request> result = this.requestRepository.findByServiceID(id);
 		return result;
 	}
-	public Collection<Request> findByRendezvousID(int id){
-		return requestRepository.findByRendezvousID(id);
-				
+	public Collection<Request> findByRendezvousID(final int id) {
+		return this.requestRepository.findByRendezvousID(id);
+
 	}
 
 	public Request save(final RequestForm requestForm) {
@@ -119,6 +119,11 @@ public class RequestService {
 		result = this.save(request);
 
 		return result;
+	}
+
+	public void flush() {
+
+		this.requestRepository.flush();
 	}
 
 }

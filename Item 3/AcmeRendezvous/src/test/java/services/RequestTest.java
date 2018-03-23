@@ -10,8 +10,6 @@
 
 package services;
 
-import java.util.Date;
-
 import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 
@@ -22,8 +20,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import utilities.AbstractTest;
-import domain.Actor;
-import forms.ActorForm;
+import domain.Rendezvous;
+import domain.Request;
+import domain.Service;
+import forms.RequestForm;
 
 @ContextConfiguration(locations = {
 	"classpath:spring/junit.xml"
@@ -34,52 +34,62 @@ public class RequestTest extends AbstractTest {
 
 	// System under test ------------------------------------------------------
 	@Autowired
-	private RequestService	requestService;
-
+	private RequestService		requestService;
 
 	// Auxiliary methods ------------------------------------------------------
+	@Autowired
+	private ServiceService		serviceService;
+	@Autowired
+	private RendezvousService	rendezvousService;
+
 
 	// Tests ------------------------------------------------------------------
 
 	@Test
 	public void createAndSaveDriver() {
 		final Object testingData[][] = {
-			{	//Creacion correcta de un usuario
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, null
-			}, {	//Creacion correcta de un usuario sin direccion
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", null, "USER", true, this.date, null, null
-			}, {	//Creacion correcta de un usuario sin telefono
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", null, "Address", "USER", true, this.date, null, null
-			}, {	//useraccount con nombre vacio
-				"", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con nombre vacio
-				"userAccountTest", "password", "password", "", "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con nombre nulo
-				"userAccountTest", "password", "password", null, "surname", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con apellido vacio
-				"userAccountTest", "password", "password", "Name", "", "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con apellido nulo
-				"userAccountTest", "password", "password", "Name", null, "email@email.email", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con correo vacio
-				"userAccountTest", "password", "password", "Name", "Surname", "", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con correo nulo
-				"userAccountTest", "password", "password", "Name", "Surname", null, "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//user con correo incorrecto
-				"userAccountTest", "password", "password", "Name", "Surname", "jdkshf", "123456789", "Address", "USER", true, this.date, null, ConstraintViolationException.class
-			}, {	//Creacion correcta de un manager
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", "Address", "MANAGER", true, this.date, "123-123", null
-			}, {	//Creacion correcta de un manager sin direccion
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", "123456789", null, "MANAGER", true, this.date, "123-123", null
-			}, {	//Creacion correcta de un manager sin telefono
-				"userAccountTest", "password", "password", "Name", "surname", "email@email.email", null, "Address", "MANAGER", true, this.date, "123-123", null
+			{	//Creacion correcta de un request
+				"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Creacion correcta de un request sin comentario
+				"user1", "service2", "rendezvous3", null, "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Creacion correcta de un request con comentario blanco
+				"user1", "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Request sin user logueado
+				null, "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Request sin servicio
+				"user1", null, "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Request sin Rendezvous
+				"user1", "service2", "rendezvous3", "", "holder", "brand", "4539433728995809", 10, 20, 150, null
+			}, {	//Request con holdername vacio
+				"user1", "service2", "rendezvous3", "one comment", "", "brand", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
+			}, {	//Request con holdername nulo
+				"user1", "service2", "rendezvous3", "one comment", null, "brand", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
+			}, {	//Request con brandname vacio
+				"user1", "service2", "rendezvous3", "one comment", "holder", "", "4539433728995809", 10, 20, 150, ConstraintViolationException.class
+			}, {	//Request con brandname nulo
+				"user1", "service2", "rendezvous3", "one comment", "holder", null, "4539433728995809", 10, 20, 150, ConstraintViolationException.class
 			}
+		//, {	//Request con creditnumber vacio
+		//	"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "", 10, 20, 150, IllegalArgumentException.class
+		//}
+		//	, {	//Request con creditnumber nulo
+		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", null, 10, 20, 150, IllegalArgumentException.class
+		//	}
+		//	, {	//Request con ExpirationYear nulo
+		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", null, 20, 150, java.lang.NullPointerException.class
+		//	}
+		//, {	//Request con ExpirationMonth nulo
+		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, null, 150, ConstraintViolationException.class
+		//	}, {	//Request con CVV nulo
+		//		"user1", "service2", "rendezvous3", "one comment", "holder", "brand", "4539433728995809", 10, 20, null, ConstraintViolationException.class
+		//}
 		};
 
 		for (int i = 0; i < testingData.length; i++)
 			try {
 				super.startTransaction();
 				this.createAndSaveTemplate((String) testingData[i][0], (String) testingData[i][1], (String) testingData[i][2], (String) testingData[i][3], (String) testingData[i][4], (String) testingData[i][5], (String) testingData[i][6],
-					(String) testingData[i][7], (String) testingData[i][8], (Boolean) testingData[i][9], (Date) testingData[i][10], (String) testingData[i][11], (Class<?>) testingData[i][12]);
+					(int) testingData[i][7], (int) testingData[i][8], (int) testingData[i][9], (Class<?>) testingData[i][10]);
 			} catch (final Throwable oops) {
 				throw new RuntimeException(oops);
 			} finally {
@@ -88,30 +98,38 @@ public class RequestTest extends AbstractTest {
 	}
 
 	// Ancillary methods ------------------------------------------------------
-	protected void createAndSaveTemplate(final String username, final String password, final String password2, final String name, final String surname, final String email, final String phone, final String address, final String authority,
-		final Boolean agree, final Date birthDate, final String vatNumber, final Class<?> expected) {
+	protected void createAndSaveTemplate(final String userName, final String serviceBeanName, final String rendezvousBeanName, final String comment, final String holdername, final String brandname, final String number, final int expirationMonth,
+		final int expirationYear, final int CVV, final Class<?> expected) {
 		Class<?> caught;
-		ActorForm actorForm;
-		Actor actor;
+		RequestForm requestForm;
+		Service service;
+		int serviceID;
+		int rendezvousId;
+		Rendezvous rendezvous;
+		final Request request;
 		caught = null;
 		try {
-			actorForm = new ActorForm();
-			actorForm.setUsername(username);
-			actorForm.setPassword(password);
-			actorForm.setPassword2(password2);
-			actorForm.setName(name);
-			actorForm.setSurname(surname);
-			actorForm.setEmail(email);
-			actorForm.setPhone(phone);
-			actorForm.setAddress(address);
-			actorForm.setAuthority(authority);
-			actorForm.setAgree(agree);
-			actorForm.setBirthDate(birthDate);
-			actorForm.setVatNumber(vatNumber);
 
-			actor = this.actorService.create(actorForm);
-			this.actorService.register(actor);
-			this.actorService.flush();
+			this.authenticate(userName);
+			serviceID = super.getEntityId(serviceBeanName);
+			service = this.serviceService.findOne(serviceID);
+			rendezvousId = super.getEntityId(rendezvousBeanName);
+			rendezvous = this.rendezvousService.findOne(rendezvousId);
+
+			requestForm = new RequestForm();
+			requestForm.setService(service);
+			requestForm.setRendezvous(rendezvous);
+			requestForm.setComment(comment);
+			requestForm.setHolderName(holdername);
+			requestForm.setBrandName(brandname);
+			requestForm.setNumber(number);
+			requestForm.setExpirationMonth(expirationMonth);
+			requestForm.setExpirationYear(expirationYear);
+			requestForm.setCVV(CVV);
+
+			request = this.requestService.save(requestForm);
+			this.requestService.save(request);
+			this.requestService.flush();
 
 		} catch (final Throwable oops) {
 			caught = oops.getClass();

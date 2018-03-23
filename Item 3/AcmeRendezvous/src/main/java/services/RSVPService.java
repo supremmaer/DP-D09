@@ -188,5 +188,8 @@ public class RSVPService {
 		this.rsvpRepository.save(rsvp);
 
 	}
+	public void flush() {
+		this.rsvpRepository.flush();
+	}
 
 }
