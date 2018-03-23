@@ -111,7 +111,7 @@ public class RendezvousService {
 		final Collection<RSVP> RSVPs = this.RSVPService.findbyRendezvous(rendezvous.getId());
 		final Collection<Comment> comments = this.commentService.findByRendezvousIdRoot(rendezvous.getId());
 		final Collection<Question> questions = rendezvous.getQuestions();
-		final Collection<Request> requests	= requestService.findByRendezvousID(rendezvous.getId());
+		final Collection<Request> requests = this.requestService.findByRendezvousID(rendezvous.getId());
 		actor = this.actorService.findByPrincipal();
 		for (final Announcement a : announcements)
 			this.announcementService.delete(a.getId());
@@ -123,19 +123,16 @@ public class RendezvousService {
 			this.commentService.delete(c);
 		for (final Question q : questions)
 			this.questionService.delete(q);
-		for(final Request r: requests)
+		for (final Request r : requests)
 			this.requestService.delete(r);
-//		eliminar rendezvouses similares
-		for(Rendezvous r:allRendezvous){
-			if(r.getRendezvouses().contains(rendezvous)){
-				Collection<Rendezvous> aux = r.getRendezvouses();
+		//		eliminar rendezvouses similares
+		for (final Rendezvous r : allRendezvous)
+			if (r.getRendezvouses().contains(rendezvous)) {
+				final Collection<Rendezvous> aux = r.getRendezvouses();
 				aux.remove(rendezvous);
 				r.setRendezvouses(aux);
-				rendezvousRepository.save(r);
+				this.rendezvousRepository.save(r);
 			}
-		}
-			
-		
 
 		Assert.notNull(rendezvous);
 		Assert.isTrue(rendezvous.getId() != 0);
@@ -346,5 +343,21 @@ public class RendezvousService {
 
 	public void flush() {
 		this.rendezvousRepository.flush();
+	}
+
+	public Collection<Rendezvous> findByUserNotRequestedForService(final int userId, final int serviceId) {
+		Collection<Rendezvous> rendezvouses;
+		Collection<Rendezvous> result;
+		Collection<Request> requests;
+
+		requests = this.requestService.findByServiceIdandUser(serviceId, userId);
+		rendezvouses = this.findByUser(userId);
+
+		result = new HashSet<>();
+		result.addAll(rendezvouses);
+		for (final Request r : requests)
+			result.remove(r.getRendezvous());
+
+		return result;
 	}
 }

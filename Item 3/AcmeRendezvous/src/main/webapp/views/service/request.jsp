@@ -50,6 +50,6 @@
 		<acme:submit name="delete" code="service.delete"/>
 	</jstl:if>
 	
-	<acme:cancel url="service/manager/list.do" code="service.cancel"/>
+	<acme:cancel url="service/user/list.do" code="service.cancel"/>
 
 </form:form>

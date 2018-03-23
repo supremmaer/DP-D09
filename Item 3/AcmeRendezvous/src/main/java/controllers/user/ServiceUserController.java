@@ -149,7 +149,7 @@ public class ServiceUserController extends AbstractController {
 		Collection<Rendezvous> rendezvouses;
 
 		user = (User) this.actorService.findByPrincipal();
-		rendezvouses = this.rendezvousService.findByUser(user.getId());
+		rendezvouses = this.rendezvousService.findByUserNotRequestedForService(user.getId(), requestForm.getService().getId());
 
 		result = new ModelAndView("service/request");
 		result.addObject("requestForm", requestForm);

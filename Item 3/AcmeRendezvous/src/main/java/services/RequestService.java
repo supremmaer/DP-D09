@@ -134,4 +134,12 @@ public class RequestService {
 		return result;
 	}
 
+	public Collection<Request> findByServiceIdandUser(final int serviceId, final int userId) {
+		Collection<Request> result;
+
+		result = this.requestRepository.findByServiceIdandUser(serviceId, userId);
+
+		return result;
+	}
+
 }
