@@ -67,6 +67,7 @@ public class RequestForm {
 	}
 
 	@CreditCardNumber
+	@NotBlank
 	public String getNumber() {
 		return this.number;
 	}
