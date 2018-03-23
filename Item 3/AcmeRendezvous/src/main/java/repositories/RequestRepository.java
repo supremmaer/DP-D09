@@ -17,4 +17,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
 	@Query("select r from Request r where r.rendezvous.id=?1")
 	Collection<Request> findByRendezvousID(int id);
+
+	@Query("select r from Request r where r.creditCard.id=?1")
+	Collection<Request> findByCreditCardId(int id);
 }

@@ -31,7 +31,7 @@ public class GPSCoordinatesTest extends AbstractTest {
 	// Tests --------------------------------------------------------
 
 	@Test
-	public void CreateAnSaveDriver() {
+	public void CreateAndSaveDriver() {
 		final Object testingData[][] = {
 			//Creacion correcta de un rendezvous
 			{

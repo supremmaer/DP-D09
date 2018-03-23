@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 
 import repositories.CreditCardRepository;
 import domain.CreditCard;
+import domain.Request;
 
 @Service
 @Transactional
@@ -18,6 +19,12 @@ public class CreditCardService {
 
 	@Autowired
 	private CreditCardRepository	creditCardRepository;
+
+	@Autowired
+	private RequestService			requestService;
+
+	@Autowired
+	private UserService				userService;
 
 
 	//Constructors
@@ -58,7 +65,15 @@ public class CreditCardService {
 		result = this.creditCardRepository.findOne(creditCardId);
 		Assert.notNull(result);
 
+		final Collection<Request> requests = this.requestService.findByCreditCard(result);
+
+		for (final Request r : requests)
+			Assert.isTrue(r.getRendezvous().getUser().equals(this.userService.findByPrincipal()));
+
 		return result;
+	}
+	public void flush() {
+		this.creditCardRepository.flush();
 	}
 
 }

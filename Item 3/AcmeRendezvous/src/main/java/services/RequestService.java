@@ -126,4 +126,12 @@ public class RequestService {
 		this.requestRepository.flush();
 	}
 
+	public Collection<Request> findByCreditCard(final CreditCard creditCard) {
+		Collection<Request> result;
+
+		result = this.requestRepository.findByCreditCardId(creditCard.getId());
+
+		return result;
+	}
+
 }
