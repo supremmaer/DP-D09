@@ -74,11 +74,13 @@
 					code="service.edit" /></a>
 		</display:column>
 	</security:authorize>
-	
+
 	<security:authorize access="hasRole('USER')">
 		<display:column sortable="false">
-			<a href="service/user/request.do?serviceId=${row.id}"><spring:message
-					code="service.request" /></a>
+			<jstl:if test="${row.cancelled == false}">
+				<a href="service/user/request.do?serviceId=${row.id}"><spring:message
+						code="service.request" /></a>
+			</jstl:if>
 		</display:column>
 	</security:authorize>
 
