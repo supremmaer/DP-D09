@@ -2,6 +2,7 @@
 package services;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.transaction.Transactional;
 
@@ -47,14 +48,19 @@ public class CreditCardService {
 
 		return result;
 	}
-	//TODO: Incluir Assert
+
 	public void delete(final CreditCard creditCard) {
 		this.creditCardRepository.delete(creditCard);
 
 	}
-	//TODO: Incluir Assert
+
+	@SuppressWarnings("deprecation")
 	public CreditCard save(final CreditCard creditCard) {
 		CreditCard result;
+		final Date dateActual = new Date();
+		if (dateActual.getYear() + 1900 == creditCard.getExpirationYear())
+			Assert.isTrue(dateActual.getMonth() + 1 <= creditCard.getExpirationMonth());
+		Assert.isTrue(dateActual.getYear() + 1900 <= creditCard.getExpirationYear());
 		result = this.creditCardRepository.save(creditCard);
 		return result;
 	}

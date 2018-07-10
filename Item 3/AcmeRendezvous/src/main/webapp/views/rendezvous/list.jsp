@@ -15,8 +15,8 @@
 
 <spring:message	code="rendezvous.orderByCategory" />
 <form action="rendezvous/list.do">
-  <select name="categoryId">
-  
+  <select name="categoryId" >
+  <option value=""><jstl:out value="----"/></option>
   <jstl:forEach items="${categories}" var="cat">
 						<option value="${cat.id}"><jstl:out value="${cat.name}"/></option>
 						
@@ -25,7 +25,7 @@
   </select>
   <input type="submit" value="Submit">
 </form>
-<display:table pagesize="5" class="displaytag" keepStatus="true" name="rendezvouses" requestURI="${requestURI}" id="row">
+<display:table pagesize="5" class="displaytag"  name="rendezvouses" requestURI="${requestURI}" id="row">
 
 <!-- Attributes -->
 

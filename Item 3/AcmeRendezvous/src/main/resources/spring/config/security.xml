@@ -95,7 +95,7 @@
 		
 		<security:intercept-url pattern="/service/user/list.do" access="isAuthenticated()" />
 		<security:intercept-url pattern="/service/user/request.do" access="hasRole('USER')" />
-
+		<security:intercept-url pattern="/category/list.do" access="isAuthenticated()" />
 		<security:intercept-url pattern="/**" access="hasRole('NONE')" />
 
 		<security:form-login 
